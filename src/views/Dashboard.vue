@@ -158,7 +158,7 @@
 
 <script>
 // import Schart from "vue-schart";
-import { getName } from "../api"
+import { getName } from "@/api"
 export default {
   name: "dashboard",
   data() {

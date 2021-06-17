@@ -110,7 +110,7 @@
 </template>
 
 <script>
-import { fetchData } from "../api/index";
+import { fetchData } from "@/api";
 export default {
     name: "basetable",
     data() {
