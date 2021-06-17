@@ -15,7 +15,7 @@ const routes = [
         path: "/dashboard",
         name: "dashboard",
         meta: {
-          title: '系统首页'
+          title: '首页'
         },
         component: () => import(
           /* webpackChunkName: "dashboard" */
@@ -135,11 +135,20 @@ const routes = [
     path: "/login",
     name: "Login",
     meta: {
-      title: '登录'
+      title: '请登录'
     },
     component: () => import(
       /* webpackChunkName: "login" */
-      "../views/Login.vue")
+      "../views/user/Login.vue")
+  },
+  {
+    path: "/register",
+    name: "Register",
+    meta: {
+      title: '注册新账号'
+    },
+    component: () => import(
+      "../views/user/Register.vue")
   }
 ];
 
@@ -151,9 +160,11 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   document.title = `${to.meta.title} | 智慧医疗物联网管理系统`;
   const role = localStorage.getItem('ms_username');
-  if (!role && to.path !== '/login') {
+  if (!role && (to.path !== '/login') && (to.path !== '/register')) {
+    console.log("您还没有登录");
     next('/login');
-  } else if (to.meta.permission) {
+  }
+  else if (to.meta.permission) {
     // 如果是管理员权限则可进入，这里只是简单的模拟管理员权限而已
     role === 'admin'
       ? next()

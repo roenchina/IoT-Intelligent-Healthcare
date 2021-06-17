@@ -7,11 +7,3 @@ export const fetchData = query => {
     params: query
   });
 };
-
-// 测试成功
-export function getName() {
-  return request({
-    url: '/user/getName',
-    method: 'post',
-  });
-}

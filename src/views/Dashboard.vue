@@ -158,7 +158,7 @@
 
 <script>
 // import Schart from "vue-schart";
-import { getName } from "@/api"
+// import { getName } from "@/api/user"
 export default {
   name: "dashboard",
   data() {
@@ -274,18 +274,18 @@ export default {
     },
   },
   mounted() {
-    this.test();
+    // this.apitest();
   },
   methods: {
-    test() {
-      console.log("before get Name");
-      getName()
-      .then(res => {
-        console.log("in get Name");
-        console.log(res);
-        console.log("out of get Name");
-      });
-    },
+    // apitest() {
+      // console.log("before get Name");
+      // getName()
+      // .then(res => {
+      //   console.log("in get Name");
+      //   console.log(res);
+        // console.log("out of get Name");
+    //   });
+    // },
     changeDate() {
       const now = new Date().getTime();
       this.data.forEach((item, index) => {
