@@ -158,6 +158,7 @@
 
 <script>
 // import Schart from "vue-schart";
+import { getName } from "../api"
 export default {
   name: "dashboard",
   data() {
@@ -272,8 +273,19 @@ export default {
       return this.name === "admin" ? "超级管理员" : "普通用户";
     },
   },
-
+  mounted() {
+    this.test();
+  },
   methods: {
+    test() {
+      console.log("before get Name");
+      getName()
+      .then(res => {
+        console.log("in get Name");
+        console.log(res);
+        console.log("out of get Name");
+      });
+    },
     changeDate() {
       const now = new Date().getTime();
       this.data.forEach((item, index) => {
