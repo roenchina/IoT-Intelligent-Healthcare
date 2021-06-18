@@ -31,6 +31,17 @@ const routes = [
           /* webpackChunkName: "table" */
           "../views/BaseTable.vue")
       },
+      // for test
+      {
+        path: "/charts",
+        name: "echarts-test",
+        meta: {
+          title: '表格'
+        },
+        component: () => import(
+          /* webpackChunkName: "table" */
+          "../views/test/EchartsTest.vue")
+      },
       // {
       //   path: "/charts",
       //   name: "basecharts",
@@ -159,14 +170,14 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   document.title = `${to.meta.title} | 智慧医疗物联网管理系统`;
-  const role = localStorage.getItem('ls_userID');
-  if (!role && (to.path !== '/login') && (to.path !== '/register')) {
+  const userRole = localStorage.getItem('ls_userRole');
+  if (!userRole && (to.path !== '/login') && (to.path !== '/register')) {
     console.log("您还没有登录");
     next('/login');
   }
   else if (to.meta.permission) {
     // 如果是管理员权限则可进入，这里只是简单的模拟管理员权限而已
-    role === 'admin'
+    userRole === 'manager'
       ? next()
       : next('/403');
   } else {

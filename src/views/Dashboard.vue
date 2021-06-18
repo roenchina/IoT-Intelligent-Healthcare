@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="dashboard-container">
     <el-row :gutter="20">
         <!-- <el-col :xs="24" :sm="12" :lg="6">
           <el-card shadow="hover" class="mgb20" style="height: 252px">
@@ -7,7 +7,7 @@
               <img src="../assets/img/img.jpg" class="user-avator" alt />
               <div class="user-info-cont">
                 <div class="user-info-name">{{ name }}</div>
-                <div>{{ role }}</div>
+                <div>{{ userRole }}</div>
               </div>
             </div>
             <div class="user-info-list">
@@ -84,6 +84,7 @@
               </div>
             </el-card>
           </el-col>
+
         </el-row>
 
 
@@ -124,8 +125,14 @@
           </el-table>
 
         </el-card>
+
+
       </el-col>
     </el-row>
+
+    <!-- <el-row style="background:#fff; padding:16px 16px 0; margin-bottom:32px;">
+      <line-chart/>
+    </el-row> -->
 
     <!-- <el-row :gutter="20">
 
@@ -163,6 +170,14 @@ export default {
   name: "dashboard",
   data() {
     return {
+      date: new Date(),
+      // clock: {
+      //   year: "",
+      //   month: "",
+      //   day: "",
+      //   time: "",
+      //   date: "",
+      // },
       name: localStorage.getItem("ls_userID"),
       todoList: [
         {
@@ -268,24 +283,17 @@ export default {
   components: {
     // Schart,
   },
+  created() {
+  },
   computed: {
-    role() {
-      return this.name === "admin" ? "超级管理员" : "普通用户";
+    userRole() {
+      return localStorage.getItem("ls_userRole");
     },
   },
   mounted() {
-    // this.apitest();
+
   },
   methods: {
-    // apitest() {
-      // console.log("before get Name");
-      // getName()
-      // .then(res => {
-      //   console.log("in get Name");
-      //   console.log(res);
-        // console.log("out of get Name");
-    //   });
-    // },
     changeDate() {
       const now = new Date().getTime();
       this.data.forEach((item, index) => {

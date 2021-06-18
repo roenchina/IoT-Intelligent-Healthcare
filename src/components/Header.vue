@@ -7,12 +7,13 @@
       <i v-else class="el-icon-lx-sort"></i>
     </div>
 
-    <div class="logo">后台管理系统</div>
+    <div class="logo">智慧医疗</div>
 
     <div class="header-right">
       <div class="header-user-con">
+
         <!-- 消息中心 -->
-        <div class="btn-bell">
+        <!-- <div class="btn-bell">
           <el-tooltip
             effect="dark"
             :content="message ? `有${message}条未读消息` : `消息中心`"
@@ -23,13 +24,13 @@
             </router-link>
           </el-tooltip>
           <span class="btn-bell-badge" v-if="message"></span>
-        </div>
+        </div> -->
 
 
         <!-- 用户头像 -->
-        <div class="user-avator">
+        <!-- <div class="user-avator">
           <img src="../assets/img/img.jpg" />
-        </div>
+        </div> -->
 
 
         <!-- 用户名下拉菜单 -->
@@ -40,12 +41,12 @@
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <a
+              <!-- <a
                 href="https://github.com/lin-xin/vue-manage-system"
                 target="_blank"
               >
                 <el-dropdown-item>项目仓库</el-dropdown-item>
-              </a>
+              </a> -->
 
               <el-dropdown-item divided command="loginout"
                 >退出登录</el-dropdown-item
@@ -63,14 +64,14 @@
 export default {
   data() {
     return {
-      name: "linxin",
+      test_name: "test",
       message: 2,
     };
   },
   computed: {
     username() {
-      let username = localStorage.getItem("ls_userID");
-      return username ? username : this.name;
+      let username = localStorage.getItem("ls_userName");
+      return username ? username : this.test_name;
     },
     ifCollapse() {
       return this.$store.state.ifCollapse;
@@ -81,6 +82,9 @@ export default {
     handleCommand(command) {
       if (command == "loginout") {
         localStorage.removeItem("ls_userID");
+        localStorage.removeItem("ls_userName");
+        localStorage.removeItem("ls_userRole");
+        localStorage.removeItem("ls_userEmail");
         this.$router.push("/login");
       }
     },
