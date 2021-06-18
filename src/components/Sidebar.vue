@@ -106,6 +106,11 @@ export default {
                     index: "icon",
                     title: "自定义图标"
                 },
+                {
+                    icon: "el-icon-lx-emoji",
+                    index: "charts",
+                    title: "测试模块"
+                },
                 // {
                 //     icon: "el-icon-pie-chart",
                 //     index: "charts",
