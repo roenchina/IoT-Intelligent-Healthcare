@@ -159,7 +159,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   document.title = `${to.meta.title} | 智慧医疗物联网管理系统`;
-  const role = localStorage.getItem('ms_username');
+  const role = localStorage.getItem('ls_userID');
   if (!role && (to.path !== '/login') && (to.path !== '/register')) {
     console.log("您还没有登录");
     next('/login');

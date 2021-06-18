@@ -210,13 +210,13 @@ D:.
 
 #### 用户User
 
-|  列名  |   说明   |    类型     |                 约束                 |
-| :----: | :------: | :---------: | :----------------------------------: |
-| userID |  用户ID  | varchar(20) |             Primary Key              |
-| email  | 注册邮箱 | varchar(50) |          Not Empty & Unique          |
-|  name  |  用户名  | varchar(30) |          Not Empty & Unique          |
-| passwd | 用户密码 | varchar(40) |              Not Empty               |
-|  type  | 用户种类 | varchar(10) | in (“doctor”, “patient”, “manager” ) |
+|    列名     |   说明   |    类型     |                 约束                 |
+| :---------: | :------: | :---------: | :----------------------------------: |
+|   userID    |  用户ID  | varchar(20) |             Primary Key              |
+|    email    | 注册邮箱 | varchar(50) |          Not Empty & Unique          |
+|    name     |  用户名  | varchar(30) |          Not Empty & Unique          |
+|   passwd    | 用户密码 | varchar(40) |              Not Empty               |
+| (type) role | 用户种类 | varchar(10) | in (“doctor”, “patient”, “manager” ) |
 
 #### 用户设备对应关系Own
 
@@ -247,13 +247,13 @@ D:.
 
 #### 用户登录相关
 
-|     接口名     | 类型 |              说明              |
-| :------------: | :--: | :----------------------------: |
-|  create_user   | POST |           创建新用户           |
-| get_user_info  | GET  | 从User表中获取该用户的个人信息 |
-| edit_user_info | POST |        用户修改个人信息        |
-|    del_user    | DEL  |       从User表中删除用户       |
-|   user_login   | POST |            登录验证            |
+|         接口名          | 类型 |              说明              |
+| :---------------------: | :--: | :----------------------------: |
+|       create_user       | POST |           创建新用户           |
+|      get_user_info      | GET  | 从User表中获取该用户的个人信息 |
+|     edit_user_info      | POST |        用户修改个人信息        |
+|        del_user         | DEL  |       从User表中删除用户       |
+| (user_login) userVerify | POST |            登录验证            |
 
 #### 设备管理相关
 

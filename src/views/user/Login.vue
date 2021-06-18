@@ -10,10 +10,10 @@
         label-width="0px"
         class="ms-content"
       >
-        <el-form-item prop="username">
+        <el-form-item prop="userID">
           <el-input
-            v-model="loginForm.username"
-            placeholder="username"
+            v-model="loginForm.userID"
+            placeholder="userID"
             tabindex="1"
             type="text"
           >
@@ -57,11 +57,11 @@ export default {
   data() {
     return {
       loginForm: {
-        username: "admin",
+        userID: "admin",
         password: "123456",
       },
       loginRules: {
-        username: [{ required: true, message: "请输入账号", trigger: "blur" }],
+        userID: [{ required: true, message: "请输入账号", trigger: "blur" }],
         password: [{ required: true, message: "请输入密码", trigger: "blur" }],
       },
     };
@@ -72,16 +72,16 @@ export default {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           const data = {
-            username: this.loginForm.username,
-            password: this.loginForm.password,
+            userID: this.loginForm.userID,
+            passwd: this.loginForm.password,
           };
           userVerify(data).then((res) => {
-            // console.log("when login-----------verifyRes");
-            // console.log(res.data.verifyRes);
-            if (res.data.verifyRes) {
+            // console.log("when login-----------");
+            // console.log(res.data.ifTrue);
+            if (res.data.ifTrue) {
               // 验证成功
               this.$message.success("登录成功！");
-              localStorage.setItem("ms_username", this.loginForm.username);
+              localStorage.setItem("ls_userID", this.loginForm.userID);
               this.$router.push("/");
             } else {
               this.$message.error("用户密码不匹配，请检查后再次输入。");

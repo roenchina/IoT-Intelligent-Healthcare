@@ -15,3 +15,11 @@ export function userVerify(data) {
     data: data,
   });
 }
+
+export function userRegister(data) {
+  return request({
+    url: '/user/userRegister',
+    method: 'post',
+    data: data,
+  });
+}
