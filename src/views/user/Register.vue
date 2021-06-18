@@ -148,7 +148,11 @@ export default {
             if(res.data.ifTrue) {
               // 后端注册成功
               this.$message.success("注册成功！将为您自动登录...");
+              // 将用户注册基本信息存到localStorage中，维护登录状态
               localStorage.setItem("ls_userID", this.registerForm.account);
+              localStorage.setItem("ls_userName", this.registerForm.name);
+              localStorage.setItem("ls_userRole", this.registerForm.role);
+              localStorage.setItem("ls_userEmail", this.registerForm.email);
               this.$router.push("/");
               this.loading = false;
             } else {

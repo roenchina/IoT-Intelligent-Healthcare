@@ -57,7 +57,7 @@ export default {
   data() {
     return {
       loginForm: {
-        userID: "admin",
+        userID: "3180105412",
         password: "123456",
       },
       loginRules: {
@@ -76,12 +76,16 @@ export default {
             passwd: this.loginForm.password,
           };
           userVerify(data).then((res) => {
-            // console.log("when login-----------");
+            console.log("when login-----------");
             // console.log(res.data.ifTrue);
             if (res.data.ifTrue) {
               // 验证成功
               this.$message.success("登录成功！");
+              // 根据从res中的结果，将用户基本信息存到localStorage中，维护登录状态
               localStorage.setItem("ls_userID", this.loginForm.userID);
+              localStorage.setItem("ls_userName", res.data.userInfo.name);
+              localStorage.setItem("ls_userRole", res.data.userInfo.role);
+              localStorage.setItem("ls_userEmail", res.data.userInfo.email);
               this.$router.push("/");
             } else {
               this.$message.error("用户密码不匹配，请检查后再次输入。");
