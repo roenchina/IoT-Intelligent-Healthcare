@@ -19,7 +19,7 @@ const routes = [
         },
         component: () => import(
           /* webpackChunkName: "dashboard" */
-          "../views/Dashboard.vue")
+          "../views/dashboard/Dashboard.vue")
       },
       {
         path: "/table",

@@ -7,7 +7,7 @@
       <i v-else class="el-icon-lx-sort"></i>
     </div>
 
-    <div class="logo">智慧医疗</div>
+    <div class="logo">system</div>
 
     <div class="header-right">
       <div class="header-user-con">

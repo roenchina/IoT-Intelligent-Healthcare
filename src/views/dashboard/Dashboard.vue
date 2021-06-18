@@ -25,7 +25,7 @@
       </el-col>
 
       <el-col :xs="24" :sm="16" :lg="16">
-        <el-card shadow="hover">
+        <el-card shadow="hover" class="clock-card">
           <template #header>
             <div class="clearfix">
               <span>当前的时间是——</span>
@@ -44,7 +44,8 @@
           <el-progress :percentage="5.9" color="#f56c6c"></el-progress> -->
         </el-card>
       </el-col>
-
+    </el-row>
+    <el-row :gutter="20">
       <el-col :span="24">
         <el-row :gutter="20" class="mgb20">
           <el-col :xs="24" :sm="12" :lg="6">
@@ -99,81 +100,143 @@
         <el-card shadow="hover" style="height: 403px">
           <template #header>
             <div class="clearfix">
-              <span>待办事项</span>
-              <el-button style="float: right; padding: 3px 0" type="text"
+              <span>最新数据记录</span>
+              <!-- <el-button style="float: right; padding: 3px 0" type="text"
                 >添加</el-button
-              >
+              > -->
             </div>
           </template>
 
-          <el-table :show-header="false" :data="todoList" style="width: 100%">
-            <el-table-column width="40">
-              <template #default="scope">
-                <el-checkbox v-model="scope.row.status"></el-checkbox>
-              </template>
+          <el-table
+            :data="detailData"
+            border
+            class="table"
+            ref="multipleTable"
+            header-cell-class-name="table-header"
+          >
+            <el-table-column
+              type="selection"
+              align="center"
+              v-if="user.role === 'manager'"
+            ></el-table-column>
+
+            <el-table-column
+              prop="time"
+              label="时间"
+              align="center"
+            ></el-table-column>
+
+            <el-table-column
+              prop="facID"
+              label="设备号"
+              align="center"
+            ></el-table-column>
+
+            <el-table-column
+              prop="wardID"
+              label="病房号"
+              align="center"
+            ></el-table-column>
+
+            <el-table-column
+              prop="location"
+              label="经纬度"
+              align="center"
+            ></el-table-column>
+
+            <el-table-column label="具体数值" align="center">
+              <template #default="scope"
+                >{{ scope.row.amount }} {{ scope.row.unit }}</template
+              >
             </el-table-column>
-            <el-table-column>
+
+            <el-table-column label="数据类型" align="center">
               <template #default="scope">
-                <div
-                  class="todo-item"
-                  :class="{
-                    'todo-item-del': scope.row.status,
-                  }"
+                <el-tag
+                  :type="
+                    scope.row.type === 'normal'
+                      ? 'success'
+                      : scope.row.type === 'warning'
+                      ? 'danger'
+                      : ''
+                  "
+                  >{{ scope.row.type }}</el-tag
                 >
-                  {{ scope.row.title }}
-                </div>
               </template>
             </el-table-column>
-            <el-table-column width="60">
-              <template>
-                <i class="el-icon-edit"></i>
-                <i class="el-icon-delete"></i>
+
+            <!-- 管理员权限：编辑、删除 -->
+            <el-table-column
+              v-if="user.role === 'manager'"
+              label="管理员操作"
+              width="180"
+              align="center"
+            >
+              <template #default="scope">
+                <el-button
+                  type="text"
+                  icon="el-icon-edit"
+                  @click="handleEdit(scope.$index, scope.row)"
+                  >编辑</el-button
+                >
+                <el-button
+                  type="text"
+                  icon="el-icon-delete"
+                  class="red"
+                  @click="handleDelete(scope.$index, scope.row)"
+                  >删除</el-button
+                >
               </template>
             </el-table-column>
+
           </el-table>
         </el-card>
       </el-col>
     </el-row>
-
-    <!-- <el-row style="background:#fff; padding:16px 16px 0; margin-bottom:32px;">
-      <line-chart/>
-    </el-row> -->
-
-    <!-- <el-row :gutter="20">
-
-      <el-col :xs="24" :sm="12" :lg="12">
-        <el-card shadow="hover">
-          <schart
-            ref="bar"
-            class="schart"
-            canvasId="bar"
-            :options="data_option1"
-          ></schart>
-        </el-card>
-      </el-col>
-
-      <el-col :xs="24" :sm="12" :lg="12">
-        <el-card shadow="hover">
-          <schart
-            ref="line"
-            class="schart"
-            canvasId="line"
-            :options="data_option2"
-          ></schart>
-        </el-card>
-      </el-col>
-
-    </el-row> -->
   </div>
+
+  <!-- <el-card shadow="hover" style="height: 403px">
+    <chart :chartData="this.chartData" />
+  </el-card> -->
 </template>
 
 <script>
+// import Chart from "./template_line_chart";
+
+// let echarts = require("echarts/lib/echarts");
+// import { GridComponent } from "echarts/components";
+// echarts.use([GridComponent]);
+
 // import Schart from "vue-schart";
 import { getBasicStatic } from "@/api/data";
 export default {
   name: "dashboard",
   data() {
     return {
+      // chartData: {
+      //   expectedData: [100, 120, 161, 134, 105, 160, 165],
+      //   actualData: [120, 82, 91, 154, 162, 140, 145],
+      // },
+      detailData: [
+        {
+          time: "2020-2-1 9:00:00",
+          facID: "001",
+          wardID: "01005",
+          location: "est",
+          type: "normal", // normal / warning
+          amount: "37.2",
+          unit: "摄氏度", // 需要根据facID查找
+        },
+        {
+          time: "2020-2-1 9:00:05",
+          facID: "002",
+          wardID: "09001",
+          location: "wst",
+          type: "warning",
+          amount: "38.9",
+          unit: "摄氏度",
+        },
+      ],
       basic: {
         facNum: 0,
         dataNum: 0,
@@ -191,6 +254,7 @@ export default {
         role: localStorage.getItem("ls_userRole"),
         email: localStorage.getItem("ls_userEmail"),
       },
+
       todoList: [
         {
           title: "今天要修复100个bug",
@@ -293,8 +357,9 @@ export default {
     };
   },
   components: {
-    // Schart,
+    // Chart
   },
+
   computed: {
     userRole() {
       return localStorage.getItem("ls_userRole");
@@ -335,27 +400,24 @@ export default {
           this.$message.error("后端服务器超时");
         });
     },
+    getDetailData_() {},
     checkDigit(i) {
-      if (i < 10)
-        i = "0" + i;
+      if (i < 10) i = "0" + i;
       return i;
     },
     refreshDateTime() {
       let icnow = new Date();
-      this.clock.nowDate = icnow.getFullYear() + '-' + this.checkDigit((icnow.getMonth() + 1)) + '-' + this.checkDigit(icnow.getDate());
-      this.clock.nowTime = this.checkDigit(icnow.getHours())
-                              + ':' + this.checkDigit(icnow.getMinutes())
-                              // + ':' + this.checkDigit(icnow.getSeconds())
-                              ;
-    },
-    changeDate() {
-      const now = new Date().getTime();
-      this.data.forEach((item, index) => {
-        const date = new Date(now - (6 - index) * 86400000);
-        item.name = `${date.getFullYear()}/${
-          date.getMonth() + 1
-        }/${date.getDate()}`;
-      });
+      this.clock.nowDate =
+        icnow.getFullYear() +
+        "-" +
+        this.checkDigit(icnow.getMonth() + 1) +
+        "-" +
+        this.checkDigit(icnow.getDate());
+      this.clock.nowTime =
+        this.checkDigit(icnow.getHours()) +
+        ":" +
+        this.checkDigit(icnow.getMinutes());
+      // + ':' + this.checkDigit(icnow.getSeconds())
     },
   },
 };
@@ -401,38 +463,6 @@ export default {
   color: #3e86ec;
 }
 
-/* .grid-con-1 .grid-con-icon {
-  background: rgb(45, 140, 240);
-}
-
-.grid-con-1 .grid-num {
-  color: rgb(45, 140, 240);
-} */
-
-/* .grid-con-2 .grid-con-icon {
-  background: rgb(100, 213, 114);
-}
-
-.grid-con-2 .grid-num {
-  color: rgb(45, 140, 240);
-}
-
-.grid-con-3 .grid-con-icon {
-  background: rgb(242, 94, 67);
-}
-
-.grid-con-3 .grid-num {
-  color: rgb(242, 94, 67);
-}
-
-.grid-con-4 .grid-con-icon {
-  background: rgb(242, 94, 67);
-}
-
-.grid-con-4 .grid-num {
-  color: rgb(242, 94, 67);
-} */
-
 .user-info {
   display: flex;
   align-items: center;
@@ -460,11 +490,11 @@ export default {
   color: #222;
 }
 
-.time-div div:first-child{
+.time-div div:first-child {
   color: #999;
   text-align: center;
 }
-.exact-time{
+.exact-time {
   font-size: 50px;
   text-align: center;
 }
@@ -493,10 +523,5 @@ export default {
 .todo-item-del {
   text-decoration: line-through;
   color: #999;
-}
-
-.schart {
-  width: 100%;
-  height: 300px;
 }
 </style>
