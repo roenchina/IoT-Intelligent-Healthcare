@@ -204,7 +204,7 @@ D:.
 | facID | 设备ID | varchar(20) |             Primary Key             |
 | name | 设备名 | varchar(30) |                                     |
 | type  | 设备类型：温度、湿度、体温、心率 | varchar(10) | in (“temp”, “humi”, “bodyt”, “rate”) |
-| state |  设备状态  | varchar(10) |  in (“online”, “offline”, “error”)  |
+| (state) status |  设备状态  | varchar(10) |  in (“online”, “offline”, “error”)  |
 | unit  | 设备数据单位 | varchar(10) |                                     |
 | step | 时间步长（单位：分钟） | INT |                                     |
 

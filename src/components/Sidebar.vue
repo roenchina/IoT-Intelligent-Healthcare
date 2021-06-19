@@ -63,6 +63,11 @@ export default {
                     title: "系统首页"
                 },
                 {
+                    icon: "el-icon-lx-punch",
+                    index: "facility",
+                    title: "设备管理"
+                },
+                {
                     icon: "el-icon-lx-cascades",
                     index: "table",
                     title: "基础表格"
@@ -109,7 +114,7 @@ export default {
                 {
                     icon: "el-icon-lx-emoji",
                     index: "charts",
-                    title: "测试模块"
+                    title: "表格测试模块"
                 },
                 // {
                 //     icon: "el-icon-pie-chart",

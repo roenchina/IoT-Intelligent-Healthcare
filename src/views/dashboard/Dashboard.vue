@@ -409,7 +409,7 @@ export default {
         .then((res) => {
           // console.log("---in getAllData---");
           // console.log(res.data);
-          this.recentData = res.data.res;
+          this.recentData = res.data.list;
         })
         .catch(() => {
           this.$message.error("getAllData后端服务器超时");

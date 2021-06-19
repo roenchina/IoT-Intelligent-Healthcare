@@ -15,17 +15,27 @@ const routes = [
         path: "/dashboard",
         name: "dashboard",
         meta: {
-          title: '首页'
+          title: '系统首页'
         },
         component: () => import(
           /* webpackChunkName: "dashboard" */
           "../views/dashboard/Dashboard.vue")
       },
       {
+        path: "/facility",
+        name: "facility",
+        meta: {
+          title: '设备管理'
+        },
+        component: () => import(
+          /* webpackChunkName: "dashboard" */
+          "../views/facility/Facility.vue")
+      },
+      {
         path: "/table",
         name: "basetable",
         meta: {
-          title: '表格'
+          title: '基础表格'
         },
         component: () => import(
           /* webpackChunkName: "table" */
@@ -36,7 +46,7 @@ const routes = [
         path: "/charts",
         name: "echarts-test",
         meta: {
-          title: '表格'
+          title: '表格测试模块'
         },
         component: () => import(
           /* webpackChunkName: "table" */
@@ -56,7 +66,7 @@ const routes = [
         path: "/form",
         name: "baseform",
         meta: {
-          title: '表单'
+          title: '表单相关'
         },
         component: () => import(
           /* webpackChunkName: "form" */
@@ -66,7 +76,7 @@ const routes = [
         path: "/tabs",
         name: "tabs",
         meta: {
-          title: 'tab标签'
+          title: 'tab选项卡'
         },
         component: () => import(
           /* webpackChunkName: "tabs" */
@@ -86,7 +96,7 @@ const routes = [
         path: "/permission",
         name: "permission",
         meta: {
-          title: '权限管理',
+          title: '权限测试',
           permission: true
         },
         component: () => import(
@@ -106,7 +116,7 @@ const routes = [
         path: "/upload",
         name: "upload",
         meta: {
-          title: '上传插件'
+          title: '文件上传'
         },
         component: () => import(
           /* webpackChunkName: "upload" */
@@ -126,7 +136,7 @@ const routes = [
         path: '/404',
         name: '404',
         meta: {
-          title: '找不到页面'
+          title: '404页面'
         },
         component: () => import(/* webpackChunkName: "404" */
           '../views/404.vue')
@@ -135,7 +145,7 @@ const routes = [
         path: '/403',
         name: '403',
         meta: {
-          title: '没有权限'
+          title: '403页面'
         },
         component: () => import(/* webpackChunkName: "403" */
           '../views/403.vue')
