@@ -11,7 +11,7 @@ export function getName() {
 export function userVerify(data) {
   return request({
     url: '/user/userVerify',
-    method: 'post',
+    method: 'get',
     data: data,
   });
 }

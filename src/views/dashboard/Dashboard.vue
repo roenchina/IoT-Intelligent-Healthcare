@@ -108,7 +108,7 @@
           </template>
 
           <el-table
-            :data="detailData"
+            :data="recentData"
             border
             class="table"
             ref="multipleTable"
@@ -140,7 +140,7 @@
 
             <el-table-column
               prop="location"
-              label="经纬度"
+              label="方位"
               align="center"
             ></el-table-column>
 
@@ -188,7 +188,6 @@
                 >
               </template>
             </el-table-column>
-
           </el-table>
         </el-card>
       </el-col>
@@ -208,7 +207,7 @@
 // echarts.use([GridComponent]);
 
 // import Schart from "vue-schart";
-import { getBasicStatic } from "@/api/data";
+import { getBasicStatic, getAllData } from "@/api/data";
 export default {
   name: "dashboard",
   data() {
@@ -217,7 +216,7 @@ export default {
       //   expectedData: [100, 120, 161, 134, 105, 160, 165],
       //   actualData: [120, 82, 91, 154, 162, 140, 145],
       // },
-      detailData: [
+      recentData: [
         {
           time: "2020-2-1 9:00:00",
           facID: "001",
@@ -382,6 +381,7 @@ export default {
   mounted() {
     this.refreshDateTime();
     this.getBasicStatic_();
+    this.getDetailData();
   },
   beforeUnmount() {
     if (this.clock.timer) {
@@ -397,10 +397,24 @@ export default {
           this.basic = res.data;
         })
         .catch(() => {
-          this.$message.error("后端服务器超时");
+          this.$message.error("getBasicStatic后端服务器超时");
         });
     },
-    getDetailData_() {},
+    getDetailData() {
+      const params = { 
+        limit: 20,
+        sort: "recent",
+      };
+      getAllData(params)
+        .then((res) => {
+          // console.log("---in getAllData---");
+          // console.log(res.data);
+          this.recentData = res.data.res;
+        })
+        .catch(() => {
+          this.$message.error("getAllData后端服务器超时");
+        });
+    },
     checkDigit(i) {
       if (i < 10) i = "0" + i;
       return i;
