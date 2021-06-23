@@ -48,6 +48,16 @@ const routes = [
           "../views/data/Detail.vue")
       },
       {
+        path: "/map",
+        name: "map",
+        meta: {
+          title: '地图视图'
+        },
+        component: () => import(
+          "../views/map/Map.vue")
+      },
+
+      {
         path: "/table",
         name: "basetable",
         meta: {
