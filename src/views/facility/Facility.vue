@@ -32,7 +32,6 @@
 
           <!-- <div style="float: right"> -->
           <el-button
-            :loading="exportingExcel"
             v-if="user.role == 'manager'"
             style="margin: 0 20px 20px 0"
             type="primary"
@@ -44,6 +43,8 @@
           </el-button>
           <!-- </div> -->
         </div>
+
+        <!-- 筛选框 -->
         <div class="data-fliter-box">
           <el-form
             :inline="true"
@@ -373,7 +374,7 @@
 
 <script>
 // import { fetchData } from "@/api/index.js";
-import { parseTime } from "@/utils/utils";
+import { formatJson } from "@/utils/utils";
 import {
   getAllFacility,
   removeFacility,
@@ -545,7 +546,7 @@ export default {
         ];
         const filterVal = ["facID", "name", "type", "status", "unit", "step"];
         const list = this.selectedData;
-        const data = this.formatJson(filterVal, list);
+        const data = formatJson(filterVal, list);
         excel.export_json_to_excel({
           header: tHeader,
           data,
@@ -555,17 +556,6 @@ export default {
         });
         this.exportingExcel = false;
       });
-    },
-    formatJson(filterVal, jsonData) {
-      return jsonData.map((v) =>
-        filterVal.map((j) => {
-          if (j === "timestamp") {
-            return parseTime(v[j]);
-          } else {
-            return v[j];
-          }
-        })
-      );
     },
     // TODO 分页逻辑
     handlePageSizeChange(size) {
@@ -602,25 +592,25 @@ export default {
       this.$confirm("确定要删除吗？", "提示", {
         type: "warning",
       })
-        .then(() => {
-          const data = { facID: row.facID };
-          removeFacility(data)
-            .then((res) => {
-              if (res.data.ifTrue) {
-                this.$message.success("删除成功");
-                // this.originalData.splice(index, 1);
-                // TODO 测试删除是否成功
-                this.getOriginalData();
-              } else {
-                this.$message.error("删除失败");
-              }
-            })
-            .catch((e) => {
-              console.log(e);
-              this.$message.error("removeFacility后端服务器超时");
-            });
-        })
-        .catch(() => {});
+      .then(() => {
+        const data = { facID: row.facID };
+        removeFacility(data)
+          .then((res) => {
+            if (res.data.ifTrue) {
+              this.$message.success("删除成功");
+              // this.originalData.splice(index, 1);
+              // TODO 测试删除是否成功
+              this.getOriginalData();
+            } else {
+              this.$message.error("删除失败");
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+            this.$message.error("removeFacility后端服务器超时");
+          });
+      })
+      .catch(() => {});
     },
     handleEdit(index, row) {
       this.editForm = JSON.parse(JSON.stringify(row));
