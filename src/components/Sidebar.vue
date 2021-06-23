@@ -68,6 +68,21 @@ export default {
                     title: "设备管理"
                 },
                 {
+                    icon: "el-icon-lx-rank",
+                    index: "data",
+                    title: "数据查询",
+                    subs: [
+                        {
+                            index: "data_overview",
+                            title: "数据总览"
+                        },
+                        {
+                            index: "data_detail",
+                            title: "病房病床数据分析"
+                        }
+                    ]
+                },
+                {
                     icon: "el-icon-lx-cascades",
                     index: "table",
                     title: "基础表格"

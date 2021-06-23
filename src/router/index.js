@@ -18,7 +18,6 @@ const routes = [
           title: '系统首页'
         },
         component: () => import(
-          /* webpackChunkName: "dashboard" */
           "../views/dashboard/Dashboard.vue")
       },
       {
@@ -28,8 +27,25 @@ const routes = [
           title: '设备管理'
         },
         component: () => import(
-          /* webpackChunkName: "dashboard" */
           "../views/facility/Facility.vue")
+      },
+      {
+        path: "/data_overview",
+        name: "data_overview",
+        meta: {
+          title: '数据一览'
+        },
+        component: () => import(
+          "../views/data/Overview.vue")
+      },
+      {
+        path: "/data_detail",
+        name: "data_detail",
+        meta: {
+          title: '病房病床数据查询'
+        },
+        component: () => import(
+          "../views/data/Detail.vue")
       },
       {
         path: "/table",
