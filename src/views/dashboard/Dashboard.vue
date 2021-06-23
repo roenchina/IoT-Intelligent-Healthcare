@@ -109,39 +109,44 @@
 
           <el-table
             :data="recentData"
+            :default-sort="{ prop: 'time', order: 'descending' }"
             border
             class="table"
             ref="multipleTable"
             header-cell-class-name="table-header"
           >
-            <el-table-column
+            <!-- <el-table-column
               type="selection"
               align="center"
               v-if="user.role === 'manager'"
-            ></el-table-column>
+            ></el-table-column> -->
 
             <el-table-column
               prop="time"
               label="时间"
               align="center"
+              sortable
             ></el-table-column>
 
             <el-table-column
               prop="facID"
               label="设备号"
               align="center"
+              sortable
             ></el-table-column>
 
             <el-table-column
               prop="wardID"
               label="病房号"
               align="center"
+              sortable
             ></el-table-column>
 
             <el-table-column
               prop="location"
               label="方位"
               align="center"
+              sortable
             ></el-table-column>
 
             <el-table-column label="具体数值" align="center">
@@ -166,7 +171,7 @@
             </el-table-column>
 
             <!-- 管理员权限：编辑、删除 -->
-            <el-table-column
+            <!-- <el-table-column
               v-if="user.role === 'manager'"
               label="管理员操作"
               width="180"
@@ -187,7 +192,7 @@
                   >删除</el-button
                 >
               </template>
-            </el-table-column>
+            </el-table-column> -->
           </el-table>
         </el-card>
       </el-col>
