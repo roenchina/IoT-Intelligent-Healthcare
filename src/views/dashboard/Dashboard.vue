@@ -135,12 +135,12 @@
               sortable
             ></el-table-column>
 
-            <el-table-column
+            <!-- <el-table-column
               prop="wardID"
               label="病房号"
               align="center"
               sortable
-            ></el-table-column>
+            ></el-table-column> -->
 
             <el-table-column
               prop="location"
@@ -155,7 +155,23 @@
               >
             </el-table-column>
 
-            <el-table-column label="数据类型" align="center">
+            <el-table-column label="数据类型" align="center" sortable>
+              <template #default="scope">
+                <el-tag effect="plain">{{
+                  scope.row.facType === "temp"
+                    ? "环境温度"
+                    : scope.row.facType === "bodyt"
+                    ? "患者体温"
+                    : scope.row.facType === "humi"
+                    ? "空气湿度"
+                    : scope.row.facType === "rate"
+                    ? "患者心率"
+                    : "其他"
+                }}</el-tag>
+              </template>
+            </el-table-column>
+
+            <el-table-column label="是否正常" align="center">
               <template #default="scope">
                 <el-tag
                   :type="
@@ -225,7 +241,7 @@ export default {
         {
           time: "2020-2-1 9:00:00",
           facID: "001",
-          wardID: "01005",
+          // wardID: "01005",
           location: "est",
           type: "normal", // normal / warning
           amount: "37.2",
@@ -234,7 +250,7 @@ export default {
         {
           time: "2020-2-1 9:00:05",
           facID: "002",
-          wardID: "09001",
+          // wardID: "09001",
           location: "wst",
           type: "warning",
           amount: "38.9",
@@ -406,7 +422,7 @@ export default {
         });
     },
     getDetailData() {
-      const params = { 
+      const params = {
         limit: 20,
         sort: "recent",
       };
@@ -416,7 +432,8 @@ export default {
           // console.log(res.data);
           this.recentData = res.data.list;
         })
-        .catch(() => {
+        .catch((e) => {
+          console.log(e);
           this.$message.error("getAllData后端服务器超时");
         });
     },
