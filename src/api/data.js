@@ -18,3 +18,13 @@ export function getAllData(data) {
     data: data,
   });
 }
+
+// 给出数据的_ID，后端直接删除该条数据
+// 返回ifTrue为是否删除成功
+export function deleteData(data) {
+  return request({
+    url: '/data/deleteData',
+    method: 'delete',
+    data: data,
+  });
+}
