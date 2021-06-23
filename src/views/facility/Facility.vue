@@ -33,6 +33,7 @@
           <!-- <div style="float: right"> -->
           <el-button
             :loading="exportingExcel"
+            v-if="user.role == 'manager'"
             style="margin: 0 20px 20px 0"
             type="primary"
             plain
@@ -251,15 +252,15 @@
         :rules="formRules"
         label-width="150px"
       >
-        <el-form-item label="ID">
+        <el-form-item prop="facID" label="ID">
           <el-input disabled v-model="editForm.facID"></el-input>
         </el-form-item>
 
-        <el-form-item label="设备名">
+        <el-form-item prop="name" label="设备名">
           <el-input v-model="editForm.name"></el-input>
         </el-form-item>
 
-        <el-form-item label="设备类型">
+        <el-form-item prop="type" label="设备类型">
           <el-select v-model="editForm.type">
             <el-option
               v-for="item in typeOptions"
@@ -271,17 +272,17 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="数据单位">
+        <el-form-item prop="unit" label="数据单位">
           <el-input v-model="editForm.unit"></el-input>
         </el-form-item>
 
-        <el-form-item label="时间步长">
+        <el-form-item prop="step" label="时间步长">
           <el-input v-model="editForm.step">
             <template v-slot:append>min</template>
           </el-input>
         </el-form-item>
 
-        <el-form-item label="设备状态">
+        <el-form-item prop="status" label="设备状态">
           <el-select v-model="editForm.status">
             <el-option
               v-for="item in statusOptions"
@@ -296,7 +297,8 @@
 
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="editVisible=false">取 消</el-button>
+          <!-- <el-button @click="debug_cancelEdit()">取 消</el-button> -->
+          <el-button @click="editVisible = false">取 消</el-button>
           <el-button type="primary" @click="saveEdit()">确 定</el-button>
         </span>
       </template>
@@ -314,14 +316,14 @@
           <el-input disabled v-model="addForm.facID"></el-input>
         </el-form-item> -->
 
-        <el-form-item label="设备名">
+        <el-form-item prop="name" label="设备名">
           <el-input
             v-model="addForm.name"
             placeholder="请输入设备名"
           ></el-input>
         </el-form-item>
 
-        <el-form-item label="设备类型">
+        <el-form-item prop="type" label="设备类型">
           <el-select v-model="addForm.type">
             <el-option
               v-for="item in typeOptions"
@@ -333,20 +335,20 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="数据单位">
+        <el-form-item prop="unit" label="数据单位">
           <el-input
             v-model="addForm.unit"
             placeholder="请输入设备的单位"
           ></el-input>
         </el-form-item>
 
-        <el-form-item label="时间步长">
+        <el-form-item prop="step" label="时间步长">
           <el-input v-model="addForm.step" placeholder="请输入设备时间步长">
             <template v-slot:append>min</template>
           </el-input>
         </el-form-item>
 
-        <el-form-item label="设备状态">
+        <el-form-item prop="status" label="设备状态">
           <el-select v-model="addForm.status">
             <el-option
               v-for="item in statusOptions"
@@ -361,7 +363,7 @@
 
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="addVisible=false">取 消</el-button>
+          <el-button @click="addVisible = false">取 消</el-button>
           <el-button type="primary" @click="saveAdd()">确 定</el-button>
         </span>
       </template>
@@ -372,7 +374,12 @@
 <script>
 // import { fetchData } from "@/api/index.js";
 import { parseTime } from "@/utils/utils";
-import { getAllFacility, removeFacility, updateFacility } from "@/api/facility";
+import {
+  getAllFacility,
+  removeFacility,
+  updateFacility,
+  addFacility,
+} from "@/api/facility";
 export default {
   name: "facility",
   data() {
@@ -401,34 +408,27 @@ export default {
       },
       // 数据修改相关
       editVisible: false,
-      editForm: {},
-      // edit: {
-      //   // index: -1,
-      //   form: {},
-      //   visible: false,
-      // },
+      editForm: {
+        name: "",
+        type: "temp",
+        status: "online",
+        unit: "",
+        step: "",
+      },
       addVisible: false,
       addForm: {
-          name: "",
-          type: "temp",
-          status: "online",
-          unit: "",
-          step: "",
+        name: "",
+        type: "temp",
+        status: "online",
+        unit: "",
+        step: "",
       },
-      // add: {
-      //   form: {
-      //     name: "",
-      //     type: "temp",
-      //     status: "online",
-      //     unit: "",
-      //     step: "",
-      //   },
-      //   visible: false,
-      // },
       formRules: {
         name: [{ required: true, message: "请输入设备名", trigger: "blur" }],
-        // type: [{required: true, message: "请输入用户名"}],
-        // status: [{required: true, message: "请输入用户名"}],
+        type: [{ required: true, message: "请选择设备类型", trigger: "blur" }],
+        status: [
+          { required: true, message: "请选择设备状态", trigger: "blur" },
+        ],
         unit: [
           {
             required: true,
@@ -438,7 +438,11 @@ export default {
         ],
         step: [
           { required: true, message: "请输入时间步长", trigger: "blur" },
-          { type: "number", message: "时间步长必须为实数", trigger: "blur" },
+          {
+            pattern: /^[1-9][0-9]*([.][0-9]+)?$/,
+            message: "时间步长必须为非零开头的实数",
+            trigger: "blur",
+          },
         ],
       },
       // TODO 分页相关
@@ -517,13 +521,6 @@ export default {
     // 根据筛选条件确定的表格中的数据
     tableData() {
       return this.originalData.filter((item) => {
-        // console.log(" ---- in handleSearch ---- this.originalData.item");
-        // console.log(this.searchForm);
-        // console.log(" ---- in handleSearch ---- T/F1~4");
-        // console.log(item.facID.includes(this.searchForm.facID));
-        // console.log(item.name.includes(this.searchForm.name));
-        // console.log(item.type.includes(this.searchForm.type));
-        // console.log(item.status.includes(this.searchForm.status));
         return (
           item.facID.includes(this.searchForm.facID) &&
           item.name.includes(this.searchForm.name) &&
@@ -581,7 +578,12 @@ export default {
     //   this.$set(this.query, "pageIndex", val);
     //   this.getOriginalData();
     // },
-
+    // 多选逻辑
+    handleSelectionChange(val) {
+      // console.log("handleSelectionChange");
+      // console.log(val);
+      this.selectedData = val;
+    },
     // 获取originalData
     getOriginalData() {
       getAllFacility()
@@ -594,12 +596,7 @@ export default {
           this.$message.error("getAllFacility后端服务器超时");
         });
     },
-    // 多选逻辑
-    handleSelectionChange(val) {
-      // console.log("handleSelectionChange");
-      // console.log(val);
-      this.selectedData = val;
-    },
+
     // 编辑 / 删除逻辑
     handleDelete(index, row) {
       this.$confirm("确定要删除吗？", "提示", {
@@ -626,41 +623,81 @@ export default {
         .catch(() => {});
     },
     handleEdit(index, row) {
-      // this.edit.index = index;
-      this.editForm = row;
+      this.editForm = JSON.parse(JSON.stringify(row));
       this.editVisible = true;
     },
     saveEdit() {
+      this.$refs["editForm"].validate((valid) => {
+        if (valid) {
+          this.editVisible = false;
+          const submit_data = this.editForm;
+          updateFacility(submit_data)
+            .then((res) => {
+              if (res.data.ifTrue) {
+                this.$message.success("修改设备 ${this.editForm.facID} 成功");
+                // TODO 前后端连接后 测试修改是否成功
+                this.getOriginalData(); // 刷新数据
+              } else {
+                this.$message.error("修改失败");
+              }
+            })
+            .catch((e) => {
+              console.log(e);
+              this.$message.error("removeFacility后端服务器超时");
+            });
+        } else {
+          this.$message.error("您提交的数据不合规范，请检查后再试。");
+        }
+      });
+    },
+    // Just for DEBUG
+    debug_cancelEdit() {
       this.editVisible = false;
-      const data = this.editForm;
-      console.log("新的修改数据");
-      console.log(data);
-      updateFacility(data)
-        .then((res) => {
-          if (res.data.ifTrue) {
-            this.$message.success("修改设备 ${this.editForm.facID} 成功");
-            // this.$set(this.tableData, this.edit.index, this.editForm);
-            // TODO 测试修改是否成功
-            this.getOriginalData();
-          } else {
-            this.$message.error("修改失败");
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-          this.$message.error("removeFacility后端服务器超时");
-        });
+      console.log("cancel edit");
+      console.log("editForm---------------");
+      console.log(this.editForm);
+      console.log("tableData---------------");
+      console.log(this.tableData);
+      console.log("originalData---------------");
+      console.log(this.originalData);
     },
     handleAdd() {
       this.addVisible = true;
     },
     saveAdd() {
       this.$refs.addForm.validate((valid) => {
-        if(valid) {
+        if (valid) {
           this.addVisible = false;
-          const data = this.addForm;
-          console.log("正在提交新增设备表单");
-          console.log(data);
+          const submit_data = this.addForm;
+          // console.log("正在提交新增设备表单");
+          // console.log(submit_data);
+          addFacility(submit_data)
+            .then((res) => {
+              // console.log("这是服务器返回的结果");
+              // console.log(res);
+              if (res.data.ifTrue) {
+                const newID = res.data.info.facID;
+                console.log(newID);
+                this.$message.success("增加设备 ${newID} 成功");
+                // TODO 前后端连接后 测试修改是否成功
+
+                // 提交成功后，清空addForm
+                this.addForm = {
+                  name: "",
+                  type: "temp",
+                  status: "online",
+                  unit: "",
+                  step: "",
+                };
+                this.getOriginalData(); // 刷新数据
+              } else {
+                this.$message.error("增加失败");
+              }
+            })
+            .catch((e) => {
+              console.log(e);
+              this.$message.error("updateFacility后端服务器超时");
+            });
         } else {
           return false;
         }
