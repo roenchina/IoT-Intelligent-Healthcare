@@ -7465,6 +7465,11 @@ requires-port@^1.0.0:
   resolved "https://registry.npm.taobao.org/requires-port/download/requires-port-1.0.0.tgz"
   integrity sha1-kl0mAdOaxIXgkc8NpcbmlNw9yv8=
 
+resize-detector@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.npm.taobao.org/resize-detector/download/resize-detector-0.3.0.tgz#fe495112e184695500a8f51e0389f15774cb1cfc"
+  integrity sha1-/klREuGEaVUAqPUeA4nxV3TLHPw=
+
 resize-observer-polyfill@^1.5.1:
   version "1.5.1"
   resolved "https://registry.npm.taobao.org/resize-observer-polyfill/download/resize-observer-polyfill-1.5.1.tgz"
@@ -8812,6 +8817,19 @@ vue-cropperjs@^5.0.0:
   integrity sha1-f4y8Rgc3rzgxtN7WNMlZBRmOMp4=
   dependencies:
     cropperjs "^1.5.6"
+
+vue-demi@^0.9.1:
+  version "0.9.1"
+  resolved "https://registry.nlark.com/vue-demi/download/vue-demi-0.9.1.tgz?cache=0&sync_timestamp=1622101091467&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fvue-demi%2Fdownload%2Fvue-demi-0.9.1.tgz#25d6e1ebd4d4010757ff3571e2bf6a1d7bf3de82"
+  integrity sha1-Jdbh69TUAQdX/zVx4r9qHXvz3oI=
+
+vue-echarts@^6.0.0-rc.6:
+  version "6.0.0-rc.6"
+  resolved "https://registry.nlark.com/vue-echarts/download/vue-echarts-6.0.0-rc.6.tgz?cache=0&sync_timestamp=1623260068981&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fvue-echarts%2Fdownload%2Fvue-echarts-6.0.0-rc.6.tgz#c12afdbe2e858c941d434996e9bb9b7af3c8c631"
+  integrity sha1-wSr9vi6FjJQdQ0mW6bubevPIxjE=
+  dependencies:
+    resize-detector "^0.3.0"
+    vue-demi "^0.9.1"
 
 vue-eslint-parser@^7.6.0:
   version "7.6.0"

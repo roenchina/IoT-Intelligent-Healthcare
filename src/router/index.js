@@ -76,7 +76,7 @@ const routes = [
         },
         component: () => import(
           /* webpackChunkName: "table" */
-          "../views/test/EchartsTest.vue")
+          "../views/test/vue-echarts.vue")
       },
       // {
       //   path: "/charts",
