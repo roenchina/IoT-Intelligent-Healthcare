@@ -1,7 +1,6 @@
 <template>
   <div class="dashboard-container">
-
-<!-- row-1: info-card -->
+    <!-- row-1: info-card -->
     <el-row :gutter="20">
       <el-col :xs="24" :sm="8" :lg="8">
         <el-card shadow="hover" class="user-info-card">
@@ -48,12 +47,12 @@
       </el-col>
     </el-row>
 
-<!-- row2: basic statics -->
+    <!-- row2: basic statics -->
     <el-row :gutter="20">
       <el-col :span="24">
         <el-row :gutter="20" class="mgb20">
           <el-col :xs="24" :sm="12" :lg="6">
-            <el-card shadow="hover" :body-style="{ padding: '0px' }">
+            <el-card shadow="hover" :body-style="{ padding: '0px' }" @click="handleSelect(1)">
               <div class="grid-content grid-con">
                 <i class="el-icon-lx-punch grid-con-icon"></i>
                 <div class="grid-cont-right">
@@ -65,7 +64,7 @@
           </el-col>
 
           <el-col :xs="24" :sm="12" :lg="6">
-            <el-card shadow="hover" :body-style="{ padding: '0px' }">
+            <el-card shadow="hover" :body-style="{ padding: '0px' }" @click="handleSelect(2)">
               <div class="grid-content grid-con">
                 <i class="el-icon-lx-comment grid-con-icon"></i>
                 <div class="grid-cont-right">
@@ -77,7 +76,7 @@
           </el-col>
 
           <el-col :xs="24" :sm="12" :lg="6">
-            <el-card shadow="hover" :body-style="{ padding: '0px' }">
+            <el-card shadow="hover" :body-style="{ padding: '0px' }" @click="handleSelect(3)">
               <div class="grid-content grid-con">
                 <i class="el-icon-lx-people grid-con-icon"></i>
                 <div class="grid-cont-right">
@@ -89,7 +88,7 @@
           </el-col>
 
           <el-col :xs="24" :sm="12" :lg="6">
-            <el-card shadow="hover" :body-style="{ padding: '0px' }">
+            <el-card shadow="hover" :body-style="{ padding: '0px' }" @click="handleSelect(4)">
               <div class="grid-content grid-con">
                 <i class="el-icon-lx-home grid-con-icon"></i>
                 <div class="grid-cont-right">
@@ -103,7 +102,7 @@
       </el-col>
     </el-row>
 
-<!-- row3: echarts -->
+    <!-- row3: echarts -->
     <el-row :gutter="20">
       <el-col :xs="24" :sm="15" :lg="15">
         <el-card class="echats-card" shadow="hover">
@@ -114,7 +113,15 @@
           </template>
 
           <div class="line-chart">
-            <v-chart class="chart" :option="option" />
+            <v-chart
+              :option="lineOption"
+              :init-option="initOptions"
+              ref="lineOption"
+              theme="light"
+              autoresize
+              @zr:click="handleZrClick"
+              @click="handleClick"
+            />
           </div>
         </el-card>
       </el-col>
@@ -127,14 +134,21 @@
             </div>
           </template>
           <div class="pie-chart">
-            <v-chart class="chart" :option="option" />
+            <v-chart
+              :option="pieOption"
+              :init-option="initOptions"
+              ref="pieOption"
+              theme="light"
+              autoresize
+              @zr:click="handleZrClick"
+              @click="handleClick"
+            />
           </div>
         </el-card>
       </el-col>
-
     </el-row>
 
-<!-- row4: data-tables -->
+    <!-- row4: data-tables -->
     <el-row :gutter="20">
       <el-col :span="24">
         <el-card shadow="hover" style="height: 400px">
@@ -253,7 +267,6 @@
         </el-card>
       </el-col>
     </el-row>
-
   </div>
 
   <!-- <el-card shadow="hover" style="height: 403px">
@@ -262,83 +275,84 @@
 </template>
 
 <script>
-// Echarts Part BEGIN
-import { use } from "echarts/core";
-import { CanvasRenderer } from "echarts/renderers";
-import { PieChart } from "echarts/charts";
+// echarts import
+import VChart from "vue-echarts";
 import {
-  TitleComponent,
+  use,
+  // registerTheme,
+} from "echarts/core";
+// registerTheme("ovilia-green", theme);
+import {
+  BarChart,
+  PieChart,
+  LineChart,
+  ScatterChart,
+  EffectScatterChart,
+} from "echarts/charts";
+import {
+  GridComponent,
+  PolarComponent,
+  GeoComponent,
   TooltipComponent,
   LegendComponent,
+  TitleComponent,
+  VisualMapComponent,
+  DatasetComponent,
+  ToolboxComponent,
+  DataZoomComponent,
 } from "echarts/components";
-import VChart, { THEME_KEY } from "vue-echarts";
-import { ref, defineComponent } from "vue";
+import { CanvasRenderer, SVGRenderer } from "echarts/renderers";
+
+// import theme from "./theme.json";
+import getBar from "@/data/bar";
+import getLine from "@/data/line";
+import getPie from "@/data/pie";
 
 use([
-  CanvasRenderer,
+  BarChart,
   PieChart,
-  TitleComponent,
+  LineChart,
+
+  ScatterChart,
+  EffectScatterChart,
+
+  GridComponent,
+  PolarComponent,
+  GeoComponent,
   TooltipComponent,
   LegendComponent,
+  TitleComponent,
+  VisualMapComponent,
+  DatasetComponent,
+  CanvasRenderer,
+  SVGRenderer,
+  ToolboxComponent,
+  DataZoomComponent,
 ]);
 
+// api import
 import { getBasicStatic, getAllData } from "@/api/data";
-export default defineComponent({
+export default {
   name: "dashboard",
   components: {
     VChart,
   },
-  provide: {
-    [THEME_KEY]: "light",
-  },
-  setup: () => {
-    const option = ref({
-      // title: {
-      //   text: "Traffic Sources",
-      //   left: "center",
-      // },
-      tooltip: {
-        trigger: "item",
-        formatter: "{a} <br/>{b} : {c} ({d}%)",
-      },
-      legend: {
-        orient: "vertical",
-        left: "right",
-        data: ["Online", "Offline", "Error"],
-      },
-      series: [
-        {
-          name: "Traffic Sources",
-          type: "pie",
-          radius: "55%",
-          center: ["50%", "60%"],
-          data: [
-            { value: 1335, name: "Online" },
-            { value: 310, name: "Offline" },
-            { value: 234, name: "Error" },
-            // { value: 135, name: "Video Ads" },
-            // { value: 1548, name: "Search Engines" },
-          ],
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: "rgba(0, 0, 0, 0.5)",
-            },
-          },
-        },
-      ],
-    });
-
-    return { option };
-  },
 
   data() {
     return {
-      // chartData: {
-      //   expectedData: [100, 120, 161, 134, 105, 160, 165],
-      //   actualData: [120, 82, 91, 154, 162, 140, 145],
-      // },
+      // echarts data
+      barOption: getBar(),
+      lineOption: getLine(),
+      pieOption: getPie(),
+      initOptions: {
+        renderer: "canvas",
+      },
+      loadingOptions: {
+        text: "Loading…?",
+        color: "#4ea397",
+        maskColor: "rgba(255, 255, 255, 0.4)",
+      },
+      //
       recentData: [
         {
           time: "2020-2-1 9:00:00",
@@ -376,106 +390,6 @@ export default defineComponent({
         role: localStorage.getItem("ls_userRole"),
         email: localStorage.getItem("ls_userEmail"),
       },
-
-      todoList: [
-        {
-          title: "今天要修复100个bug",
-          status: false,
-        },
-        {
-          title: "今天要修复100个bug",
-          status: false,
-        },
-        {
-          title: "今天要写100行代码加几个bug吧",
-          status: false,
-        },
-        {
-          title: "今天要修复100个bug",
-          status: false,
-        },
-        {
-          title: "今天要修复100个bug",
-          status: true,
-        },
-        {
-          title: "今天要写100行代码加几个bug吧",
-          status: true,
-        },
-      ],
-      data: [
-        {
-          name: "2018/09/04",
-          value: 1083,
-        },
-        {
-          name: "2018/09/05",
-          value: 941,
-        },
-        {
-          name: "2018/09/06",
-          value: 1139,
-        },
-        {
-          name: "2018/09/07",
-          value: 816,
-        },
-        {
-          name: "2018/09/08",
-          value: 327,
-        },
-        {
-          name: "2018/09/09",
-          value: 228,
-        },
-        {
-          name: "2018/09/10",
-          value: 1065,
-        },
-      ],
-      data_option1: {
-        type: "bar",
-        title: {
-          text: "最近一周各品类销售图",
-        },
-        xRorate: 25,
-        labels: ["周一", "周二", "周三", "周四", "周五"],
-        datasets: [
-          {
-            label: "家电",
-            data: [234, 278, 270, 190, 230],
-          },
-          {
-            label: "百货",
-            data: [164, 178, 190, 135, 160],
-          },
-          {
-            label: "食品",
-            data: [144, 198, 150, 235, 120],
-          },
-        ],
-      },
-      data_option2: {
-        type: "line",
-        title: {
-          text: "最近几个月各品类销售趋势图",
-        },
-        labels: ["6月", "7月", "8月", "9月", "10月"],
-        datasets: [
-          {
-            label: "家电",
-            data: [234, 278, 270, 190, 230],
-          },
-          {
-            label: "百货",
-            data: [164, 178, 150, 135, 160],
-          },
-          {
-            label: "食品",
-            data: [74, 118, 200, 235, 90],
-          },
-        ],
-      },
     };
   },
 
@@ -488,6 +402,9 @@ export default defineComponent({
     },
     nowTime() {
       return this.clock.nowTime;
+    },
+    showDataID() {
+      return this.$store.state.showDataID;
     },
   },
   created() {
@@ -509,6 +426,25 @@ export default defineComponent({
     }
   },
   methods: {
+    // echarts methods
+    handleZrClick(...args) {
+      console.log("click from zrender", ...args);
+    },
+    handleClick(...args) {
+      console.log("click from echarts", ...args);
+    },
+    convertToImage() {
+      console.log("convert to image");
+    },
+    // 四大区块 数据点选
+    handleSelect(id) {
+      this.$store.commit("handleShowData", id);
+      this.lineOption = getLine();
+      // console.log(this.barOption);
+      // console.log("showDataID");
+      // console.log(this.$store.state.showDataID);
+      // console.log(this.showDataID);
+    },
     getBasicStatic_() {
       getBasicStatic()
         .then((res) => {
@@ -555,11 +491,10 @@ export default defineComponent({
       // + ':' + this.checkDigit(icnow.getSeconds())
     },
   },
-});
+};
 </script>
 
 <style scoped>
-
 .line-chart {
   height: 400px;
 }

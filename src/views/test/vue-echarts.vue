@@ -136,10 +136,10 @@ export default {
   },
   data() {
     return {
+      barOption: getBar(),
       lineOption: getLine(),
       pieOption,
       mapOption,
-      barOption: getBar(),
       initOptions: {
         renderer: "canvas",
       },

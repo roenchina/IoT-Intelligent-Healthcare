@@ -38,3 +38,10 @@ export function addFacility(newdata) {
     data: newdata,
   });
 }
+
+export function getFacCount() {
+  return request({
+    url: '/facility/getFacCount',
+    method: 'get',
+  });
+}
