@@ -64,20 +64,18 @@ const routes = [
           title: '基础表格'
         },
         component: () => import(
-          /* webpackChunkName: "table" */
           "../views/BaseTable.vue")
       },
-      // for test
       {
-        path: "/charts",
+        path: "/echarts",
         name: "echarts-test",
         meta: {
-          title: '表格测试模块'
+          title: 'vue-echarts测试模块'
         },
         component: () => import(
-          /* webpackChunkName: "table" */
           "../views/test/vue-echarts.vue")
       },
+
       // {
       //   path: "/charts",
       //   name: "basecharts",
@@ -85,7 +83,6 @@ const routes = [
       //     title: '图表'
       //   },
       //   component: () => import(
-      //     /* webpackChunkName: "charts" */
       //     "../views/BaseCharts.vue")
       // },
       {
@@ -95,7 +92,6 @@ const routes = [
           title: '表单相关'
         },
         component: () => import(
-          /* webpackChunkName: "form" */
           "../views/BaseForm.vue")
       },
       {
@@ -105,19 +101,8 @@ const routes = [
           title: 'tab选项卡'
         },
         component: () => import(
-          /* webpackChunkName: "tabs" */
           "../views/Tabs.vue")
       },
-      // {
-      //   path: "/donate",
-      //   name: "donate",
-      //   meta: {
-      //     title: '鼓励作者'
-      //   },
-      //   component: () => import(
-      //     /* webpackChunkName: "donate" */
-      //     "../views/Donate.vue")
-      // },
       {
         path: "/permission",
         name: "permission",
@@ -126,18 +111,8 @@ const routes = [
           permission: true
         },
         component: () => import(
-          /* webpackChunkName: "permission" */
           "../views/Permission.vue")
       },
-      // {
-      //   path: "/i18n",
-      //   name: "i18n",
-      //   meta: {
-      //     title: '国际化语言'
-      //   },
-      //   component: () => import(
-      //     "../views/I18n.vue")
-      // },
       {
         path: "/upload",
         name: "upload",
@@ -145,7 +120,6 @@ const routes = [
           title: '文件上传'
         },
         component: () => import(
-          /* webpackChunkName: "upload" */
           "../views/Upload.vue")
       },
       {
@@ -155,7 +129,6 @@ const routes = [
           title: '自定义图标'
         },
         component: () => import(
-          /* webpackChunkName: "icon" */
           "../views/Icon.vue")
       },
       {
@@ -164,7 +137,7 @@ const routes = [
         meta: {
           title: '404页面'
         },
-        component: () => import(/* webpackChunkName: "404" */
+        component: () => import(
           '../views/404.vue')
       },
       {
@@ -173,7 +146,7 @@ const routes = [
         meta: {
           title: '403页面'
         },
-        component: () => import(/* webpackChunkName: "403" */
+        component: () => import(
           '../views/403.vue')
       }
     ]
@@ -185,7 +158,6 @@ const routes = [
       title: '请登录'
     },
     component: () => import(
-      /* webpackChunkName: "login" */
       "../views/user/Login.vue")
   },
   {
