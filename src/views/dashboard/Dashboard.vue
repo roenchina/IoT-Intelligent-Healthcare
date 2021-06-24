@@ -1,5 +1,7 @@
 <template>
   <div class="dashboard-container">
+
+<!-- row-1: info-card -->
     <el-row :gutter="20">
       <el-col :xs="24" :sm="8" :lg="8">
         <el-card shadow="hover" class="user-info-card">
@@ -45,6 +47,8 @@
         </el-card>
       </el-col>
     </el-row>
+
+<!-- row2: basic statics -->
     <el-row :gutter="20">
       <el-col :span="24">
         <el-row :gutter="20" class="mgb20">
@@ -96,8 +100,44 @@
             </el-card>
           </el-col>
         </el-row>
+      </el-col>
+    </el-row>
 
-        <el-card shadow="hover" style="height: 403px">
+<!-- row3: echarts -->
+    <el-row :gutter="20">
+      <el-col :xs="24" :sm="15" :lg="15">
+        <el-card class="echats-card" shadow="hover">
+          <template #header>
+            <div class="clearfix">
+              <span>折线图</span>
+            </div>
+          </template>
+
+          <div class="line-chart">
+            <v-chart class="chart" :option="option" />
+          </div>
+        </el-card>
+      </el-col>
+
+      <el-col :xs="24" :sm="9" :lg="9">
+        <el-card class="echats-card" shadow="hover">
+          <template #header>
+            <div class="clearfix">
+              <span>饼图</span>
+            </div>
+          </template>
+          <div class="pie-chart">
+            <v-chart class="chart" :option="option" />
+          </div>
+        </el-card>
+      </el-col>
+
+    </el-row>
+
+<!-- row4: data-tables -->
+    <el-row :gutter="20">
+      <el-col :span="24">
+        <el-card shadow="hover" style="height: 400px">
           <template #header>
             <div class="clearfix">
               <span>最新数据记录</span>
@@ -213,6 +253,7 @@
         </el-card>
       </el-col>
     </el-row>
+
   </div>
 
   <!-- <el-card shadow="hover" style="height: 403px">
@@ -221,16 +262,77 @@
 </template>
 
 <script>
-// import Chart from "./template_line_chart";
+// Echarts Part BEGIN
+import { use } from "echarts/core";
+import { CanvasRenderer } from "echarts/renderers";
+import { PieChart } from "echarts/charts";
+import {
+  TitleComponent,
+  TooltipComponent,
+  LegendComponent,
+} from "echarts/components";
+import VChart, { THEME_KEY } from "vue-echarts";
+import { ref, defineComponent } from "vue";
 
-// let echarts = require("echarts/lib/echarts");
-// import { GridComponent } from "echarts/components";
-// echarts.use([GridComponent]);
+use([
+  CanvasRenderer,
+  PieChart,
+  TitleComponent,
+  TooltipComponent,
+  LegendComponent,
+]);
 
-// import Schart from "vue-schart";
 import { getBasicStatic, getAllData } from "@/api/data";
-export default {
+export default defineComponent({
   name: "dashboard",
+  components: {
+    VChart,
+  },
+  provide: {
+    [THEME_KEY]: "light",
+  },
+  setup: () => {
+    const option = ref({
+      // title: {
+      //   text: "Traffic Sources",
+      //   left: "center",
+      // },
+      tooltip: {
+        trigger: "item",
+        formatter: "{a} <br/>{b} : {c} ({d}%)",
+      },
+      legend: {
+        orient: "vertical",
+        left: "right",
+        data: ["Online", "Offline", "Error"],
+      },
+      series: [
+        {
+          name: "Traffic Sources",
+          type: "pie",
+          radius: "55%",
+          center: ["50%", "60%"],
+          data: [
+            { value: 1335, name: "Online" },
+            { value: 310, name: "Offline" },
+            { value: 234, name: "Error" },
+            // { value: 135, name: "Video Ads" },
+            // { value: 1548, name: "Search Engines" },
+          ],
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: "rgba(0, 0, 0, 0.5)",
+            },
+          },
+        },
+      ],
+    });
+
+    return { option };
+  },
+
   data() {
     return {
       // chartData: {
@@ -376,9 +478,6 @@ export default {
       },
     };
   },
-  components: {
-    // Chart
-  },
 
   computed: {
     userRole() {
@@ -456,10 +555,23 @@ export default {
       // + ':' + this.checkDigit(icnow.getSeconds())
     },
   },
-};
+});
 </script>
 
 <style scoped>
+
+.line-chart {
+  height: 400px;
+}
+
+.pie-chart {
+  height: 400px;
+}
+
+.card {
+  margin-bottom: 20px;
+}
+
 .el-row {
   margin-bottom: 20px;
 }
