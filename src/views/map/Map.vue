@@ -8,171 +8,151 @@
       </el-breadcrumb>
     </div>
 
-    <div class="container">
-      <el-table
-        :data="tableData"
-        border
-        class="table"
-        ref="multipleTable"
-        header-cell-class-name="table-header"
-        @selection-change="handleSelectionChange"
-      >
-        <el-table-column
-          type="selection"
-          width="55"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          prop="id"
-          label="ID"
-          width="55"
-          align="center"
-        ></el-table-column>
-        <el-table-column prop="name" label="用户名"></el-table-column>
-        <el-table-column label="账户余额">
-          <template #default="scope">￥{{ scope.row.money }}</template>
-        </el-table-column>
-        <el-table-column label="头像(查看大图)" align="center">
-          <template #default="scope">
-            <el-image
-              class="table-td-thumb"
-              :src="scope.row.thumb"
-              :preview-src-list="[scope.row.thumb]"
-            ></el-image>
+    <el-row :gutter="20">
+      <el-col :span="24">
+        <el-card class="echats-card" shadow="hover">
+          <template #header>
+            <div class="clearfix">
+              <span>地图</span>
+            </div>
           </template>
-        </el-table-column>
-        <el-table-column prop="address" label="地址"></el-table-column>
-        <el-table-column label="状态" align="center">
-          <template #default="scope">
-            <el-tag
-              :type="
-                scope.row.state === '成功'
-                  ? 'success'
-                  : scope.row.state === '失败'
-                  ? 'danger'
-                  : ''
-              "
-              >{{ scope.row.state }}</el-tag
-            >
-          </template>
-        </el-table-column>
 
-        <el-table-column prop="date" label="注册时间"></el-table-column>
-        <el-table-column label="操作" width="180" align="center">
-          <template #default="scope">
-            <el-button
-              type="text"
-              icon="el-icon-edit"
-              @click="handleEdit(scope.$index, scope.row)"
-              >编辑</el-button
-            >
-            <el-button
-              type="text"
-              icon="el-icon-delete"
-              class="red"
-              @click="handleDelete(scope.$index, scope.row)"
-              >删除</el-button
-            >
-          </template>
-        </el-table-column>
-      </el-table>
+          <div class="line-chart" style="height: 400px">
+            <v-chart
+              :option="mapOption"
+              :init-option="initOptions"
+              ref="mapOption"
+              theme="light"
+              autoresize
+              @zr:click="handleZrClick"
+              @click="handleClick"
+            />
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+
+    <div class="container">
+      <baidu-map
+        class="bm-view"
+        :center="mapCenter"
+        :zoom="mapZoom"
+        @ready="handleReady"
+        ak="xWqFenIrYQr5OW5OHgZKTBZSSHMlBb0Q"
+      >
+      </baidu-map>
     </div>
 
-    <!-- <div class="container">
-      <amap :zoom="11" :center="[117.000923, 36.675807]">
-        <amap-marker :position="[117.000923, 36.675807]" />
-      </amap>
-    </div> -->
+    <div class="container">
+      <baidu-map
+        class="bm-view"
+        center="北京"
+        @ready="handleReady"
+        ak="xWqFenIrYQr5OW5OHgZKTBZSSHMlBb0Q"
+      >
+      </baidu-map>
+    </div>
   </div>
 </template>
 
 <script>
-import { fetchData } from "@/api/index.js";
+// baidu map import
+import BaiduMap from "vue-baidu-map/components/map/Map.vue";
+// import { BmlMarkerClusterer } from "vue-baidu-map";
+// echarts import
+import VChart from "vue-echarts";
+import { use, registerMap } from "echarts/core";
+
+import { MapChart, ScatterChart, EffectScatterChart } from "echarts/charts";
+
+import {
+  GridComponent,
+  PolarComponent,
+  GeoComponent,
+  TooltipComponent,
+  LegendComponent,
+  TitleComponent,
+  VisualMapComponent,
+  DatasetComponent,
+  ToolboxComponent,
+  DataZoomComponent,
+} from "echarts/components";
+
+import { CanvasRenderer, SVGRenderer } from "echarts/renderers";
+
+import mapOption from "@/data/map";
+import chinaMap from "@/data/china.json";
+registerMap("china", chinaMap);
+
+use([
+  MapChart,
+
+  ScatterChart,
+  EffectScatterChart,
+
+  GridComponent,
+  PolarComponent,
+  GeoComponent,
+  TooltipComponent,
+  LegendComponent,
+  TitleComponent,
+  VisualMapComponent,
+  DatasetComponent,
+  CanvasRenderer,
+  SVGRenderer,
+  ToolboxComponent,
+  DataZoomComponent,
+]);
+
 export default {
-  name: "basetable",
+  name: "map-view",
+  components: {
+    VChart,
+    BaiduMap,
+    // BmlMarkerClusterer,
+  },
   data() {
     return {
-      query: {
-        address: "",
-        name: "",
-        pageIndex: 1,
-        pageSize: 10,
+      // baidu map
+      mapCenter: {
+        lng: 0,
+        lat: 0,
       },
-      tableData: [],
-      multipleSelection: [],
-      delList: [],
-      editVisible: false,
-      pageTotal: 0,
-      form: {},
-      idx: -1,
-      id: -1,
+      mapZoom: 3,
+      // echarts map
+      mapOption,
+      initOptions: {
+        renderer: "canvas",
+      },
     };
   },
-  created() {
-    this.getData();
-  },
+  created() {},
   methods: {
-    // 获取 easy-mock 的模拟数据
-    getData() {
-      fetchData(this.query).then((res) => {
-        console.log(res);
-        this.tableData = res.list;
-        this.pageTotal = res.pageTotal || 50;
-      });
+    // baidu map
+    handleReady({ BMap, map }) {
+      console.log("BMap ready");
+      console.log(BMap, map);
+      this.mapCenter.lng = 116.404;
+      this.mapCenter.lat = 39.915;
+      this.mapZoom = 15;
     },
-    // 触发搜索按钮
-    handleSearch() {
-      this.$set(this.query, "pageIndex", 1);
-      this.getData();
+    // echarts map
+    handleZrClick(...args) {
+      console.log("click from zrender", ...args);
     },
-    // 删除操作
-    handleDelete(index) {
-      // 二次确认删除
-      this.$confirm("确定要删除吗？", "提示", {
-        type: "warning",
-      })
-        .then(() => {
-          this.$message.success("删除成功");
-          this.tableData.splice(index, 1);
-        })
-        .catch(() => {});
-    },
-    // 多选操作
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
-    },
-    delAllSelection() {
-      const length = this.multipleSelection.length;
-      let str = "";
-      this.delList = this.delList.concat(this.multipleSelection);
-      for (let i = 0; i < length; i++) {
-        str += this.multipleSelection[i].name + " ";
-      }
-      this.$message.error(`删除了${str}`);
-      this.multipleSelection = [];
-    },
-    // 编辑操作
-    handleEdit(index, row) {
-      this.idx = index;
-      this.form = row;
-      this.editVisible = true;
-    },
-    // 保存编辑
-    saveEdit() {
-      this.editVisible = false;
-      this.$message.success(`修改第 ${this.idx + 1} 行成功`);
-      this.$set(this.tableData, this.idx, this.form);
-    },
-    // 分页导航
-    handlePageChange(val) {
-      this.$set(this.query, "pageIndex", val);
-      this.getData();
+    handleClick(...args) {
+      console.log("click from echarts", ...args);
     },
   },
 };
 </script>
 
 <style scoped>
+.bm-view {
+  width: 100%;
+  height: 300px;
+}
+
 .container {
   margin-bottom: 10px;
 }
