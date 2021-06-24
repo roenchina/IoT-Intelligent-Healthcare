@@ -75,7 +75,15 @@ const routes = [
         component: () => import(
           "../views/test/vue-echarts.vue")
       },
-
+      {
+        path: "/testmap",
+        name: "testmap",
+        meta: {
+          title: 'map测试模块'
+        },
+        component: () => import(
+          "../views/test/map.vue")
+      },
       // {
       //   path: "/charts",
       //   name: "basecharts",
