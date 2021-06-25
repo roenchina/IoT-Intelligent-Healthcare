@@ -903,6 +903,13 @@
     "@babel/helper-validator-identifier" "^7.14.5"
     to-fast-properties "^2.0.0"
 
+"@fawmi/vue-google-maps@^0.8.7":
+  version "0.8.7"
+  resolved "https://registry.nlark.com/@fawmi/vue-google-maps/download/@fawmi/vue-google-maps-0.8.7.tgz#a73c77e87b61e717745e8ac3b73ade899bad3afe"
+  integrity sha1-pzx36Hth5xd0XorDtzreiZutOv4=
+  dependencies:
+    marker-clusterer-plus "^2.1.4"
+
 "@googlemaps/js-api-loader@^1.12.1":
   version "1.12.1"
   resolved "https://registry.nlark.com/@googlemaps/js-api-loader/download/@googlemaps/js-api-loader-1.12.1.tgz#97b442e5b8087400ba2f99f083dbdeeacfb0709b"
@@ -5822,6 +5829,11 @@ markdown-it@^8.4.0:
     linkify-it "^2.0.0"
     mdurl "^1.0.1"
     uc.micro "^1.0.5"
+
+marker-clusterer-plus@^2.1.4:
+  version "2.1.4"
+  resolved "https://registry.npm.taobao.org/marker-clusterer-plus/download/marker-clusterer-plus-2.1.4.tgz#f8eff74d599dab3b7d0e3fed5264ea0e704f5d67"
+  integrity sha1-+O/3TVmdqzt9Dj/tUmTqDnBPXWc=
 
 md5.js@^1.3.4:
   version "1.3.5"
