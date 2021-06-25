@@ -17,26 +17,88 @@
         >
           <!-- <Marker :options="markerOptions" @click="clickMarker" /> -->
           <Marker
-            v-for="item in markerOptions"
-            :key="item.label"
+            v-for="item in selectedMarker"
+            :key="item.position"
             :options="item"
             icon="http://maps.google.com/mapfiles/ms/icons/orange-dot.png"
-            @click="clickMarker"
+            @click="clickMarker(item.zIndex)"
+          >
+            <!-- <GMapInfoWindow
+              :open="openedMarkerID === item.zIndex"
+              >
+              <div>I am in info window
+              </div>
+            </GMapInfoWindow> -->
+
+          </Marker>
+          <Polyline
+            v-for="item in selectedPolyline"
+            :key="item.facID"
+            :options="item"
           />
-          <Polyline v-if="showPolyline" :options="flightPath" />
         </GoogleMap>
       </div>
 
       <div class="data-table">
-        <el-button
-          style="margin: 0 20px 20px 0"
-          type="primary"
-          icon="el-icon-document"
-          plain
-          @click="handleResetSelecion()"
-        >
-          重置
-        </el-button>
+        <div class="control-box">
+          <el-form
+            :inline="true"
+            :model="selectForm"
+            class="search-form-inline"
+          >
+            <!-- <el-form-item>
+              <el-input
+                v-model="selectForm.startTime"
+                placeholder="筛选开始时间"
+                clearable
+              ></el-input>
+            </el-form-item>
+
+            <el-form-item>
+              <el-input
+                v-model="selectForm.endTime"
+                placeholder="筛选终止时间"
+                clearable
+              ></el-input>
+            </el-form-item> -->
+
+            <el-form-item>
+              <el-input
+                v-model="selectForm.facID"
+                placeholder="筛选设备ID"
+                clearable
+              ></el-input>
+            </el-form-item>
+
+            <el-form-item>
+              <el-button icon="el-icon-search" circle @click="handleSelect"></el-button>
+            </el-form-item>
+
+            <el-form-item style="float:right;">
+
+          <el-switch
+            v-model="showPolyline"
+            active-text="显示轨迹线"
+            inactive-text=""
+          >
+          </el-switch>
+
+          <el-button
+            style="margin: 0 20px 20px 10px"
+            type="primary"
+            icon="el-icon-lx-refresh"
+            plain
+            @click="handleResetSelecion()"
+          >
+            重置筛选
+          </el-button>
+            </el-form-item>
+
+          </el-form>
+
+
+        </div>
+
         <el-table
           :data="tableData"
           ref="tableData"
@@ -128,11 +190,18 @@ export default defineComponent({
     GoogleMap,
     Marker,
     Polyline,
+    // GMapInfoWindow,
   },
   data() {
     return {
       showPolyline: false,
-      selectFacID: "",
+      openedMarkerID: 0,
+      selectForm: {
+        startTime: "",
+        endTime: "",
+        facID: "",
+      },
+      // selectFacID: "",
       originalData: [
         {
           _ID: "10001",
@@ -144,24 +213,14 @@ export default defineComponent({
           unit: "摄氏度", // 需要根据facID查找
           facType: "体温",
         },
-        {
-          _ID: "10008",
-          facID: "1002",
-          time: "2020-2-1",
-          location: "wst",
-          type: "warning",
-          amount: "38.9",
-          unit: "摄氏度",
-          facType: "体温",
-        },
       ],
     };
   },
   setup() {
     const center = { lat: 40.689247, lng: -74.044502 };
     const markerOptions = getMarkerOptions();
-    const flightPath = getPolylineOptions();
-    return { center, markerOptions, flightPath };
+    const polylineOptions = getPolylineOptions();
+    return { center, markerOptions, polylineOptions };
   },
   created() {
     this.getOriginalData();
@@ -170,35 +229,59 @@ export default defineComponent({
   computed: {
     tableData() {
       return this.originalData.filter((item) => {
-        return item.facID.includes(this.selectFacID);
+        return item.facID.includes(this.selectForm.facID);
       });
+    },
+    selectedMarker() {
+      return this.markerOptions.filter((item) => {
+        return item.facID.includes(this.selectForm.facID);
+      });
+    },
+    selectedPolyline() {
+      if(this.showPolyline)
+        return this.polylineOptions.filter((item) => {
+          return item.facID.includes(this.selectForm.facID);
+        });
+      else
+        return [];
     },
   },
   methods: {
-    clickMarker(...arg) {
-      console.log("click marker");
+    clickMarker(zIndex) {
+      // console.log("click marker");
       // console.log("operation1: select a facID");
       // console.log("operation2: revert the showPolyline");
-      console.log(arg);
+      console.log(zIndex);
+      this.openedMarkerID = zIndex;
       // console.log(arg[0].latLng.lat());
       // console.log(arg[0].latLng.lng());
-      this.showPolyline = !this.showPolyline;
-      if (this.selectFacID == "020") {
-        this.selectFacID = "";
-        this.showPolyline = false;
-      } else {
-        this.selectFacID = "020";
-        this.showPolyline = true;
-      }
+      // this.showPolyline = !this.showPolyline;
+      // if (this.selectFacID == "020") {
+      //   this.selectFacID = "";
+      //   this.showPolyline = false;
+      // } else {
+      //   this.selectFacID = "020";
+      //   this.showPolyline = true;
+      // }
     },
     handleResetSelecion() {
       this.showPolyline = false;
-      this.selectFacID = "";
+      this.selectForm = {
+        startTime: "",
+        endTime: "",
+        facID: "",
+      };
+    },
+    handleSelect() {
+      console.log("select");
+      console.log(this.selectForm);
     },
     getOriginalData() {
       const params = {
         limit: 100,
         sort: "recent",
+        startTime: "",
+        endTime: "",
       };
       getAllData(params)
         .then((res) => {

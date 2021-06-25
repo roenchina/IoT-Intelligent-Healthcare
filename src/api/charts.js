@@ -31,3 +31,12 @@ export function getAllLine() {
     method: 'get',
   });
 }
+
+
+// map
+export function getMarkers() {
+  return request({
+    url: '/charts/getMarkers',
+    method: 'get',
+  });
+}
