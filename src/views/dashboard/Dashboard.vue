@@ -315,11 +315,6 @@ import {
 } from "echarts/components";
 import { CanvasRenderer, SVGRenderer } from "echarts/renderers";
 
-// import theme from "./theme.json";
-// import getBar from "@/data/bar";
-// import getLine from "@/data/line";
-// import getPie from "@/data/pie";
-
 use([
   BarChart,
   PieChart,
@@ -353,9 +348,6 @@ export default {
 
   data() {
     return {
-      // echarts data
-      // lineOption: {},
-      // pieOption: {},
       showDataID: 1,
       initOptions: {
         renderer: "canvas",

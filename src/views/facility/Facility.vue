@@ -218,31 +218,6 @@
           </template>
         </el-table-column>
       </el-table>
-
-      <!-- 分页 -->
-      <!-- <div class="pagination">
-        <el-pagination
-          background
-          layout="total, prev, pager, next"
-          :hide-on-single-page="false"
-          :current-page="query.pageIndex"
-          :page-size="query.pageSize"
-          :total="pageTotal"
-          @current-change="handlePageChange"
-        ></el-pagination>
-
-        <el-pagination
-          layout="total, sizes, prev, pager, next"
-          background
-          :current-page="page.current"
-          :page-size="page.size"
-          :page-sizes="[1, 5, 10, 30]"
-          @size-change="handlePageSizeChange"
-          @current-change="handlePageCurrentChange"
-          :total="originalData.length"
-        >
-        </el-pagination>
-      </div> -->
     </div>
 
     <!-- 编辑弹出框 -->
@@ -389,10 +364,6 @@ export default {
       exportingExcel: false,
       // 前端勾选的数据
       selectedData: [],
-      page: {
-        size: 5,
-        current: 1,
-      },
       // 用户相关
       user: {
         ID: localStorage.getItem("ls_userID"),
@@ -445,13 +416,6 @@ export default {
             trigger: "blur",
           },
         ],
-      },
-      // TODO 分页相关
-      query: {
-        address: "",
-        name: "",
-        pageIndex: 1,
-        pageSize: 10,
       },
       // enum类型数据
       typeOptions: [
@@ -557,17 +521,6 @@ export default {
         this.exportingExcel = false;
       });
     },
-    // TODO 分页逻辑
-    handlePageSizeChange(size) {
-      this.page.size = size;
-    },
-    handlePageCurrentChange(current) {
-      this.page.current = current;
-    },
-    // handlePageChange(val) {
-    //   this.$set(this.query, "pageIndex", val);
-    //   this.getOriginalData();
-    // },
     // 多选逻辑
     handleSelectionChange(val) {
       // console.log("handleSelectionChange");
@@ -643,13 +596,13 @@ export default {
     // Just for DEBUG
     debug_cancelEdit() {
       this.editVisible = false;
-      console.log("cancel edit");
-      console.log("editForm---------------");
-      console.log(this.editForm);
-      console.log("tableData---------------");
-      console.log(this.tableData);
-      console.log("originalData---------------");
-      console.log(this.originalData);
+      // console.log("cancel edit");
+      // console.log("editForm---------------");
+      // console.log(this.editForm);
+      // console.log("tableData---------------");
+      // console.log(this.tableData);
+      // console.log("originalData---------------");
+      // console.log(this.originalData);
     },
     handleAdd() {
       this.addVisible = true;

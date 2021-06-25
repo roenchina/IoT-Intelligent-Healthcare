@@ -173,8 +173,6 @@
 </template>
 
 // <script>
-// import getMarkerOptions from "@/data/markerOptions";
-// import getPolylineOptions from "@/data/polylineOptions";
 import { getAllData } from "@/api/data.js";
 import { getAllMarkers, getAllPolyline} from "@/api/charts.js";
 

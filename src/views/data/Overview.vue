@@ -279,19 +279,6 @@ export default {
           facType: "体温",
         },
       ],
-      query: {
-        address: "",
-        name: "",
-        pageIndex: 1,
-        pageSize: 10,
-      },
-      multipleSelection: [],
-      delList: [],
-      editVisible: false,
-      pageTotal: 0,
-      form: {},
-      idx: -1,
-      id: -1,
     };
   },
   created() {
