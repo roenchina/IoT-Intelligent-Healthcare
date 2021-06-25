@@ -52,7 +52,11 @@
       <el-col :span="24">
         <el-row :gutter="20" class="mgb20">
           <el-col :xs="24" :sm="12" :lg="6">
-            <el-card shadow="hover" :body-style="{ padding: '0px' }" @click="handleSelect(1)">
+            <el-card
+              shadow="hover"
+              :body-style="{ padding: '0px' }"
+              @click="handleSelect(1)"
+            >
               <div class="grid-content grid-con">
                 <i class="el-icon-lx-punch grid-con-icon"></i>
                 <div class="grid-cont-right">
@@ -64,7 +68,11 @@
           </el-col>
 
           <el-col :xs="24" :sm="12" :lg="6">
-            <el-card shadow="hover" :body-style="{ padding: '0px' }" @click="handleSelect(2)">
+            <el-card
+              shadow="hover"
+              :body-style="{ padding: '0px' }"
+              @click="handleSelect(2)"
+            >
               <div class="grid-content grid-con">
                 <i class="el-icon-lx-comment grid-con-icon"></i>
                 <div class="grid-cont-right">
@@ -76,7 +84,11 @@
           </el-col>
 
           <el-col :xs="24" :sm="12" :lg="6">
-            <el-card shadow="hover" :body-style="{ padding: '0px' }" @click="handleSelect(3)">
+            <el-card
+              shadow="hover"
+              :body-style="{ padding: '0px' }"
+              @click="handleSelect(3)"
+            >
               <div class="grid-content grid-con">
                 <i class="el-icon-lx-people grid-con-icon"></i>
                 <div class="grid-cont-right">
@@ -88,7 +100,11 @@
           </el-col>
 
           <el-col :xs="24" :sm="12" :lg="6">
-            <el-card shadow="hover" :body-style="{ padding: '0px' }" @click="handleSelect(4)">
+            <el-card
+              shadow="hover"
+              :body-style="{ padding: '0px' }"
+              @click="handleSelect(4)"
+            >
               <div class="grid-content grid-con">
                 <i class="el-icon-lx-home grid-con-icon"></i>
                 <div class="grid-cont-right">
@@ -268,10 +284,6 @@
       </el-col>
     </el-row>
   </div>
-
-  <!-- <el-card shadow="hover" style="height: 403px">
-    <chart :chartData="this.chartData" />
-  </el-card> -->
 </template>
 
 <script>
@@ -281,7 +293,7 @@ import {
   use,
   // registerTheme,
 } from "echarts/core";
-// registerTheme("ovilia-green", theme);
+
 import {
   BarChart,
   PieChart,
@@ -304,9 +316,9 @@ import {
 import { CanvasRenderer, SVGRenderer } from "echarts/renderers";
 
 // import theme from "./theme.json";
-import getBar from "@/data/bar";
-import getLine from "@/data/line";
-import getPie from "@/data/pie";
+// import getBar from "@/data/bar";
+// import getLine from "@/data/line";
+// import getPie from "@/data/pie";
 
 use([
   BarChart,
@@ -332,6 +344,7 @@ use([
 
 // api import
 import { getBasicStatic, getAllData } from "@/api/data";
+import { getDataPie, getFacPie, getAllLine } from "@/api/charts";
 export default {
   name: "dashboard",
   components: {
@@ -341,18 +354,21 @@ export default {
   data() {
     return {
       // echarts data
-      barOption: getBar(),
-      lineOption: getLine(),
-      pieOption: getPie(),
+      // lineOption: {},
+      // pieOption: {},
+      showDataID: 1,
       initOptions: {
         renderer: "canvas",
       },
+      e_dataPie: [],
+      e_facPie: [],
+      e_lineData: [],
+
       loadingOptions: {
         text: "Loading…?",
         color: "#4ea397",
         maskColor: "rgba(255, 255, 255, 0.4)",
       },
-      //
       recentData: [
         {
           time: "2020-2-1 9:00:00",
@@ -392,7 +408,6 @@ export default {
       },
     };
   },
-
   computed: {
     userRole() {
       return localStorage.getItem("ls_userRole");
@@ -403,8 +418,96 @@ export default {
     nowTime() {
       return this.clock.nowTime;
     },
-    showDataID() {
-      return this.$store.state.showDataID;
+    // echarts options
+    pieOption() {
+      var pieTitle;
+      var pieCatalog;
+      var newdata;
+      if (this.showDataID == 1) {
+        pieTitle = "设备状况一览";
+        pieCatalog = ["online", "offline", "error"];
+        newdata = this.e_facPie;
+      } else {
+        pieTitle = "数据分类一览";
+        pieCatalog = ["normal", "warning"];
+        newdata = this.e_dataPie;
+      }
+      const option = {
+        title: {
+          text: pieTitle,
+          left: "center",
+        },
+        tooltip: {
+          trigger: "item",
+          formatter: "{a} <br/>{b} : {c} ({d}%)",
+        },
+        legend: {
+          orient: "vertical",
+          left: "left",
+          data: pieCatalog,
+        },
+        series: [
+          {
+            name: pieTitle,
+            type: "pie",
+            radius: "55%",
+            center: ["50%", "60%"],
+            data: newdata,
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: "rgba(0, 0, 0, 0.5)",
+              },
+            },
+          },
+        ],
+      };
+      return option;
+    },
+    lineOption() {
+      var dim = ["time", "2015", "2016", "2017", "2018"];
+      var title_text = "title";
+      // var ser = [{ type: "line" }];
+      if (this.showDataID == 1) {
+        dim = ["time", "2015"];
+        title_text = "2015";
+        // ser = [{ type: "line" }];
+      } else if (this.showDataID == 2) {
+        dim = ["time", "2016"];
+        title_text = "2016";
+        // ser = [{ type: "line" }];
+      } else if (this.showDataID == 3) {
+        dim = ["time", "2017"];
+        title_text = "2017";
+        // ser = [{ type: "line" }];
+      } else if (this.showDataID == 4) {
+        dim = ["time", "2018"];
+        title_text = "2018";
+      }
+      const option = {
+        title: {
+          text: title_text,
+          left: "center",
+        },
+        dataset: {
+          dimensions: dim,
+          source: this.e_lineData,
+        },
+        xAxis: { type: "category" },
+        yAxis: {},
+        series: [{ type: "line", smooth: true }],
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+              type: 'cross',
+              label: {
+                  backgroundColor: '#6a7985'
+              }
+          }
+        },
+      };
+      return option;
     },
   },
   created() {
@@ -417,6 +520,7 @@ export default {
   },
   mounted() {
     this.refreshDateTime();
+    this.getEchartsData();
     this.getBasicStatic_();
     this.getDetailData();
   },
@@ -433,17 +537,15 @@ export default {
     handleClick(...args) {
       console.log("click from echarts", ...args);
     },
+    // TODO
     convertToImage() {
       console.log("convert to image");
     },
     // 四大区块 数据点选
     handleSelect(id) {
-      this.$store.commit("handleShowData", id);
-      this.lineOption = getLine();
-      // console.log(this.barOption);
-      // console.log("showDataID");
-      // console.log(this.$store.state.showDataID);
-      // console.log(this.showDataID);
+      if (this.showDataID != id) {
+        this.showDataID = id;
+      }
     },
     getBasicStatic_() {
       getBasicStatic()
@@ -489,6 +591,42 @@ export default {
         ":" +
         this.checkDigit(icnow.getMinutes());
       // + ':' + this.checkDigit(icnow.getSeconds())
+    },
+    getEchartsData() {
+      // pie
+      getFacPie()
+        .then((res) => {
+          this.e_facPie = res.data;
+          // console.log("get e_facPie");
+          // console.log(this.e_facPie);
+        })
+        .catch((e) => {
+          console.log(e);
+          this.$message.error("getFacPie后端服务器超时");
+        });
+
+      getDataPie()
+        .then((res) => {
+          this.e_dataPie = res.data;
+          // console.log("get e_dataPie");
+          // console.log(this.e_dataPie);
+        })
+        .catch((e) => {
+          console.log(e);
+          this.$message.error("getDataPie后端服务器超时");
+        });
+
+      // line
+      getAllLine()
+        .then((res) => {
+          this.e_lineData = res.data;
+          // console.log("get e_lineData");
+          // console.log(this.e_lineData);
+        })
+        .catch((e) => {
+          console.log(e);
+          this.$message.error("getAllLine后端服务器超时");
+        });
     },
   },
 };
