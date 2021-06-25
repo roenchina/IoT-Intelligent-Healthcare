@@ -8,96 +8,61 @@
       </el-breadcrumb>
     </div>
 
-    <!-- <div class="container">
-      <baidu-map
-        class="bm-view"
-        :center="mapCenter"
-        :zoom="mapZoom"
-        ak="xWqFenIrYQr5OW5OHgZKTBZSSHMlBb0Q"
-      >
-      </baidu-map>
-    </div>
-
-    <div class="container">
-      <baidu-map
-        class="bm-view"
-        center="北京"
-        @ready="handleReady"
-        ak="xWqFenIrYQr5OW5OHgZKTBZSSHMlBb0Q"
-      >
-      </baidu-map>
-    </div> -->
-
-    <!-- <div class="container">
-      <baidu-map
-        class="bm-view"
-        :center="北京"
-        @ready="handleReady"
-        ak="xWqFenIrYQr5OW5OHgZKTBZSSHMlBb0Q"
-      >
-      </baidu-map>
-    </div> -->
     <GoogleMap
       api-key="AIzaSyBHyiVWRgD6L3Zvgn7dFGL0N5ytYVaJmWM"
       style="width: 100%; height: 500px"
       :center="center"
       :zoom="15"
     >
-      <Marker :options="{ position: center }" />
+      <!-- <Marker :options="markerOptions" @click="clickMarker" /> -->
+      <Marker
+        v-for="item in markerOptions"
+        :key="item.label"
+        :options="item"
+        icon="http://maps.google.com/mapfiles/ms/icons/orange-dot.png"
+        @click="clickMarker"
+      />
     </GoogleMap>
   </div>
 </template>
 
 <script>
-// baidu map import
-// import BaiduMap from "vue-baidu-map/components/map/Map.vue";
-// import { BmlMarkerClusterer } from "vue-baidu-map";
 import { defineComponent } from "vue";
 import { GoogleMap, Marker } from "vue3-google-map";
+import getMarkerOptions from "@/data/markerOptions";
+
 export default defineComponent({
-  name: "map-view",
+  name: "map-test",
   components: {
-    // BaiduMap,
     GoogleMap,
     Marker,
-    // BmlMarkerClusterer,
   },
   data() {
     return {
-      // baidu map
-      center : { lat: 40.689247, lng: -74.044502 },
-      mapCenter: {
-        lng: 116.404,
-        lat: 39.915,
-      },
-      mapZoom: 15,
+      
     };
+  },
+  setup() {
+    const center = { lat: 40.689247, lng: -74.044502 };
+    const markerOptions = getMarkerOptions();
+    // console.log(markerOptions);
+
+    return { center, markerOptions };
   },
   created() {},
   mounted() {},
   methods: {
-    setup() {
-      const center = { lat: 40.689247, lng: -74.044502 };
-      return { center };
-    },
-    // baidu map
-    handleReady({ BMap, map }) {
-      console.log("BMap ready");
-      console.log(BMap, map);
-      this.mapCenter.lng = 116.404;
-      this.mapCenter.lat = 39.915;
-      this.mapZoom = 15;
+    clickMarker(...arg) {
+      console.log("click marker");
+      console.log(arg);
+      console.log(arg[0].latLng.lat());
+      console.log(arg[0].latLng.lng());
     },
   },
 });
 </script>
 
 <style scoped>
-.bm-view {
-  width: 100%;
-  height: 300px;
-}
-
 .container {
   margin-bottom: 10px;
   width: 100%;
