@@ -7,154 +7,206 @@
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-
-    <el-row :gutter="20">
-      <el-col :span="24">
-        <el-card class="echats-card" shadow="hover">
-          <template #header>
-            <div class="clearfix">
-              <span>地图</span>
-            </div>
-          </template>
-
-          <div class="line-chart" style="height: 400px">
-            <v-chart
-              :option="mapOption"
-              :init-option="initOptions"
-              ref="mapOption"
-              theme="light"
-              autoresize
-              @zr:click="handleZrClick"
-              @click="handleClick"
-            />
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
-
     <div class="container">
-      <baidu-map
-        class="bm-view"
-        :center="mapCenter"
-        :zoom="mapZoom"
-        @ready="handleReady"
-        ak="xWqFenIrYQr5OW5OHgZKTBZSSHMlBb0Q"
-      >
-      </baidu-map>
-    </div>
+      <div class="google-map">
+        <GoogleMap
+          api-key="AIzaSyBHyiVWRgD6L3Zvgn7dFGL0N5ytYVaJmWM"
+          style="width: 100%; height: 500px"
+          :center="center"
+          :zoom="15"
+        >
+          <!-- <Marker :options="markerOptions" @click="clickMarker" /> -->
+          <Marker
+            v-for="item in markerOptions"
+            :key="item.label"
+            :options="item"
+            icon="http://maps.google.com/mapfiles/ms/icons/orange-dot.png"
+            @click="clickMarker"
+          />
+          <Polyline v-if="showPolyline" :options="flightPath" />
+        </GoogleMap>
+      </div>
 
-    <div class="container">
-      <baidu-map
-        class="bm-view"
-        center="北京"
-        @ready="handleReady"
-        ak="xWqFenIrYQr5OW5OHgZKTBZSSHMlBb0Q"
-      >
-      </baidu-map>
+      <div class="data-table">
+        <el-button
+          style="margin: 0 20px 20px 0"
+          type="primary"
+          icon="el-icon-document"
+          plain
+          @click="handleResetSelecion()"
+        >
+          重置
+        </el-button>
+        <el-table
+          :data="tableData"
+          ref="tableData"
+          border
+          class="table"
+          header-cell-class-name="table-header"
+          :default-sort="{ prop: 'time', order: 'descending' }"
+        >
+          <el-table-column
+            prop="facID"
+            label="设备号"
+            align="center"
+            sortable
+          ></el-table-column>
+
+          <el-table-column
+            prop="_ID"
+            label="数据ID"
+            align="center"
+            sortable
+          ></el-table-column>
+
+          <el-table-column
+            prop="time"
+            label="时间"
+            align="center"
+            sortable
+          ></el-table-column>
+
+          <el-table-column
+            prop="location"
+            label="方位"
+            align="center"
+            sortable
+          ></el-table-column>
+
+          <el-table-column label="具体数值" align="center">
+            <template #default="scope"
+              >{{ scope.row.amount }} {{ scope.row.unit }}</template
+            >
+          </el-table-column>
+
+          <el-table-column label="数据类型" align="center" sortable>
+            <template #default="scope">
+              <el-tag effect="plain">{{
+                scope.row.facType === "temp"
+                  ? "环境温度"
+                  : scope.row.facType === "bodyt"
+                  ? "患者体温"
+                  : scope.row.facType === "humi"
+                  ? "空气湿度"
+                  : scope.row.facType === "rate"
+                  ? "患者心率"
+                  : "其他"
+              }}</el-tag>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="是否正常" align="center">
+            <template #default="scope">
+              <el-tag
+                :type="
+                  scope.row.type === 'normal'
+                    ? 'success'
+                    : scope.row.type === 'warning'
+                    ? 'danger'
+                    : ''
+                "
+                >{{ scope.row.type }}</el-tag
+              >
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-// baidu map import
-import BaiduMap from "vue-baidu-map/components/map/Map.vue";
-// import { BmlMarkerClusterer } from "vue-baidu-map";
-// echarts import
-import VChart from "vue-echarts";
-import { use, registerMap } from "echarts/core";
+import { defineComponent } from "vue";
+import { GoogleMap, Marker, Polyline } from "vue3-google-map";
+import getMarkerOptions from "@/data/markerOptions";
+import getPolylineOptions from "@/data/polylineOptions";
 
-import { MapChart, ScatterChart, EffectScatterChart } from "echarts/charts";
-
-import {
-  GridComponent,
-  PolarComponent,
-  GeoComponent,
-  TooltipComponent,
-  LegendComponent,
-  TitleComponent,
-  VisualMapComponent,
-  DatasetComponent,
-  ToolboxComponent,
-  DataZoomComponent,
-} from "echarts/components";
-
-import { CanvasRenderer, SVGRenderer } from "echarts/renderers";
-
-import mapOption from "@/data/map";
-import chinaMap from "@/data/china.json";
-registerMap("china", chinaMap);
-
-use([
-  MapChart,
-
-  ScatterChart,
-  EffectScatterChart,
-
-  GridComponent,
-  PolarComponent,
-  GeoComponent,
-  TooltipComponent,
-  LegendComponent,
-  TitleComponent,
-  VisualMapComponent,
-  DatasetComponent,
-  CanvasRenderer,
-  SVGRenderer,
-  ToolboxComponent,
-  DataZoomComponent,
-]);
-
-export default {
-  name: "map-view",
+export default defineComponent({
+  name: "map-test",
   components: {
-    VChart,
-    BaiduMap,
-    // BmlMarkerClusterer,
+    GoogleMap,
+    Marker,
+    Polyline,
   },
   data() {
     return {
-      // baidu map
-      mapCenter: {
-        lng: 0,
-        lat: 0,
-      },
-      mapZoom: 3,
-      // echarts map
-      mapOption,
-      initOptions: {
-        renderer: "canvas",
-      },
+      showPolyline: false,
+      selectFacID: "",
+      originalData: [
+        {
+          _ID: "10001",
+          facID: "5211",
+          time: "2021-6-23",
+          location: "est",
+          type: "normal", // normal / warning
+          amount: "37.2",
+          unit: "摄氏度", // 需要根据facID查找
+          facType: "体温",
+        },
+        {
+          _ID: "10008",
+          facID: "1002",
+          time: "2020-2-1",
+          location: "wst",
+          type: "warning",
+          amount: "38.9",
+          unit: "摄氏度",
+          facType: "体温",
+        },
+      ],
     };
   },
+  setup() {
+    const center = { lat: 40.689247, lng: -74.044502 };
+    const markerOptions = getMarkerOptions();
+    const flightPath = getPolylineOptions();
+    return { center, markerOptions, flightPath };
+  },
   created() {},
-  methods: {
-    // baidu map
-    handleReady({ BMap, map }) {
-      console.log("BMap ready");
-      console.log(BMap, map);
-      this.mapCenter.lng = 116.404;
-      this.mapCenter.lat = 39.915;
-      this.mapZoom = 15;
-    },
-    // echarts map
-    handleZrClick(...args) {
-      console.log("click from zrender", ...args);
-    },
-    handleClick(...args) {
-      console.log("click from echarts", ...args);
+  mounted() {},
+  computed: {
+    tableData() {
+      return this.originalData.filter((item) => {
+        return(
+          item.facID.includes(this.selectFacID)
+        );
+      });
     },
   },
-};
+  methods: {
+    clickMarker(...arg) {
+      console.log("click marker");
+      console.log("operation1: select a facID");
+      console.log("operation2: revert the showPolyline");
+      console.log(arg);
+      // console.log(arg[0].latLng.lat());
+      // console.log(arg[0].latLng.lng());
+      this.showPolyline = !this.showPolyline;
+      if(this.selectFacID == "1002") {
+        this.selectFacID = "";
+        this.showPolyline = false;
+      }
+      else {
+        this.selectFacID = "1002";
+        this.showPolyline = true;
+      }
+    },
+    handleResetSelecion() {
+      this.showPolyline = false;
+      this.selectFacID = "";
+    },
+  },
+});
 </script>
 
 <style scoped>
-.bm-view {
+/* .container {
+  margin-bottom: 10px;
   width: 100%;
   height: 300px;
-}
-
-.container {
-  margin-bottom: 10px;
+} */
+.data-table {
+  margin-top: 20px;
 }
 
 .handle-box {
