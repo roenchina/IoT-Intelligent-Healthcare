@@ -33,10 +33,18 @@ export function getAllLine() {
 }
 
 
-// map
-export function getMarkers() {
+// 每个data对应一个marker元素
+export function getAllMarkers() {
   return request({
-    url: '/charts/getMarkers',
+    url: '/charts/getAllMarkers',
+    method: 'get',
+  });
+}
+
+// 每个设备对应一个polyline元素
+export function getAllPolyline() {
+  return request({
+    url: '/charts/getAllPolyline',
     method: 'get',
   });
 }

@@ -13,7 +13,7 @@
           api-key="AIzaSyBHyiVWRgD6L3Zvgn7dFGL0N5ytYVaJmWM"
           style="width: 100%; height: 500px"
           :center="mapCenter"
-          :zoom="15"
+          :zoom="14"
         >
           <GMapMarker
             v-for="item in selectedMarker"
@@ -172,10 +172,11 @@
   </div>
 </template>
 
-<script>
-import getMarkerOptions from "@/data/markerOptions";
-import getPolylineOptions from "@/data/polylineOptions";
+// <script>
+// import getMarkerOptions from "@/data/markerOptions";
+// import getPolylineOptions from "@/data/polylineOptions";
 import { getAllData } from "@/api/data.js";
+import { getAllMarkers, getAllPolyline} from "@/api/charts.js";
 
 export default {
   name: "map-test",
@@ -190,8 +191,8 @@ export default {
         endTime: "",
         facID: "",
       },
-      markerOptions: getMarkerOptions(),
-      polylineOptions: getPolylineOptions(),
+      originalMarker: [],
+      originalPolyline: [],
       originalData: [
         {
           _ID: "10001",
@@ -208,6 +209,8 @@ export default {
   },
   created() {
     this.getOriginalData();
+    this.getMarkerOptions();
+    this.getPolylineOptions();
   },
   mounted() {},
   computed: {
@@ -217,13 +220,13 @@ export default {
       });
     },
     selectedMarker() {
-      return this.markerOptions.filter((item) => {
+      return this.originalMarker.filter((item) => {
         return item.facID.includes(this.selectForm.facID);
       });
     },
     selectedPolyline() {
       if (this.showPolyline)
-        return this.polylineOptions.filter((item) => {
+        return this.originalPolyline.filter((item) => {
           return item.facID.includes(this.selectForm.facID);
         });
       else return [];
@@ -247,6 +250,26 @@ export default {
     handleSelect() {
       // console.log("select");
       // console.log(this.selectForm);
+    },
+    getMarkerOptions() {
+      getAllMarkers()
+        .then((res) =>{
+          this.originalMarker = res.data.list;
+        })
+        .catch((e) => {
+          console.log(e);
+          this.$message.error("getAllMarkers后端服务器超时");
+        })
+    },
+    getPolylineOptions() {
+      getAllPolyline()
+        .then((res) =>{
+          this.originalPolyline = res.data.list;
+        })
+        .catch((e) => {
+          console.log(e);
+          this.$message.error("getAllPolyline后端服务器超时");
+        })
     },
     getOriginalData() {
       const params = {
