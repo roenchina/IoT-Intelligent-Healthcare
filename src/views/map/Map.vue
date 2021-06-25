@@ -120,6 +120,7 @@ import { defineComponent } from "vue";
 import { GoogleMap, Marker, Polyline } from "vue3-google-map";
 import getMarkerOptions from "@/data/markerOptions";
 import getPolylineOptions from "@/data/polylineOptions";
+import { getAllData } from "@/api/data.js";
 
 export default defineComponent({
   name: "map-test",
@@ -162,38 +163,53 @@ export default defineComponent({
     const flightPath = getPolylineOptions();
     return { center, markerOptions, flightPath };
   },
-  created() {},
+  created() {
+    this.getOriginalData();
+  },
   mounted() {},
   computed: {
     tableData() {
       return this.originalData.filter((item) => {
-        return(
-          item.facID.includes(this.selectFacID)
-        );
+        return item.facID.includes(this.selectFacID);
       });
     },
   },
   methods: {
     clickMarker(...arg) {
       console.log("click marker");
-      console.log("operation1: select a facID");
-      console.log("operation2: revert the showPolyline");
+      // console.log("operation1: select a facID");
+      // console.log("operation2: revert the showPolyline");
       console.log(arg);
       // console.log(arg[0].latLng.lat());
       // console.log(arg[0].latLng.lng());
       this.showPolyline = !this.showPolyline;
-      if(this.selectFacID == "1002") {
+      if (this.selectFacID == "020") {
         this.selectFacID = "";
         this.showPolyline = false;
-      }
-      else {
-        this.selectFacID = "1002";
+      } else {
+        this.selectFacID = "020";
         this.showPolyline = true;
       }
     },
     handleResetSelecion() {
       this.showPolyline = false;
       this.selectFacID = "";
+    },
+    getOriginalData() {
+      const params = {
+        limit: 100,
+        sort: "recent",
+      };
+      getAllData(params)
+        .then((res) => {
+          // console.log("in getAllData api");
+          // console.log(res.data);
+          this.originalData = res.data.list;
+        })
+        .catch((e) => {
+          console.log(e);
+          this.$message.error("getAllData后端服务器超时");
+        });
     },
   },
 });
