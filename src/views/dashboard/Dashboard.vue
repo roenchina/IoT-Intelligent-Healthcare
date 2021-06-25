@@ -427,7 +427,12 @@ export default {
         pieTitle = "设备状况一览";
         pieCatalog = ["online", "offline", "error"];
         newdata = this.e_facPie;
+      } else if (this.showDataID == 2) {
+        pieTitle = "数据分类一览";
+        pieCatalog = ["normal", "warning"];
+        newdata = this.e_dataPie;
       } else {
+        // TODO 不做改变
         pieTitle = "数据分类一览";
         pieCatalog = ["normal", "warning"];
         newdata = this.e_dataPie;
@@ -462,6 +467,14 @@ export default {
             },
           },
         ],
+        toolbox: {
+          feature: {
+            // dataZoom: {
+            //     yAxisIndex: 'none'
+            // },
+            saveAsImage: {},
+          },
+        },
       };
       return option;
     },
@@ -496,15 +509,34 @@ export default {
         },
         xAxis: { type: "category" },
         yAxis: {},
-        series: [{ type: "line", smooth: true }],
+        series: [
+          {
+            type: "line",
+            smooth: true,
+            // TODO 确定要不要动画
+            // animation: false,
+          },
+        ],
         tooltip: {
           trigger: "axis",
           axisPointer: {
-              type: 'cross',
-              label: {
-                  backgroundColor: '#6a7985'
-              }
-          }
+            type: "cross",
+            label: {
+              backgroundColor: "#6a7985",
+            },
+          },
+        },
+
+        toolbox: {
+          feature: {
+            // dataZoom: {
+            //     yAxisIndex: 'none'
+            // },
+            saveAsImage: {},
+            magicType: {
+              type: ["line", "bar"],
+            },
+          },
         },
       };
       return option;
@@ -536,10 +568,6 @@ export default {
     },
     handleClick(...args) {
       console.log("click from echarts", ...args);
-    },
-    // TODO
-    convertToImage() {
-      console.log("convert to image");
     },
     // 四大区块 数据点选
     handleSelect(id) {
@@ -692,12 +720,6 @@ export default {
   margin-bottom: 20px;
 }
 
-.user-avator {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-}
-
 .user-info-cont {
   padding-left: 10px;
   flex: 1;
@@ -735,14 +757,5 @@ export default {
 .mgb20 {
   margin-top: 20px;
   margin-bottom: 20px;
-}
-
-.todo-item {
-  font-size: 14px;
-}
-
-.todo-item-del {
-  text-decoration: line-through;
-  color: #999;
 }
 </style>
