@@ -203,39 +203,43 @@ D:.
 | :---: | :---------: | :------: | :---------------------------------: |
 | facID | 设备ID | varchar(20) |             Primary Key             |
 | name | 设备名 | varchar(30) |                                     |
-| type  | 设备类型：温度、湿度、体温、心率 | varchar(10) | in (“temp”, “humi”, “bodyt”, “rate”) |
+| type  | 设备类型-温度、湿度、体温、心率 | varchar(10) | in (“temp”, “humi”, “bodyt”, “rate”) |
 | (state) status |  设备状态  | varchar(10) |  in (“online”, “offline”, “error”)  |
 | unit  | 设备数据单位 | varchar(10) |                                     |
-| step | 时间步长（单位：分钟） | INT |                                     |
+| step | 时间步长（单位：分钟） | demical(3, 2) |                                     |
+| **wardID** |  |  | |
+| **bedID** |  |  | |
 
 #### 用户User
 
-|    列名     |   说明   |    类型     |                 约束                 |
-| :---------: | :------: | :---------: | :----------------------------------: |
-|   userID    |  用户ID  | varchar(20) |             Primary Key              |
-|    email    | 注册邮箱 | varchar(50) |          Not Empty & Unique          |
-|    name     |  用户名  | varchar(30) |          Not Empty & Unique          |
-|   passwd    | 用户密码 | varchar(40) |              Not Empty               |
-| (type) role | 用户种类 | varchar(10) | in (“doctor”, “patient”, “manager” ) |
+|    列名     |   说明   |    类型     |                   约束                   |
+| :---------: | :------: | :---------: | :--------------------------------------: |
+|   userID    |  用户ID  | varchar(20) |               Primary Key                |
+|    name     |  用户名  | varchar(30) |          Not Empty & ~~Unique~~          |
+|    email    | 注册邮箱 | varchar(50) |            Not Empty & Unique            |
+|   passwd    | 用户密码 | varchar(40) |                Not Empty                 |
+| (type) role | 用户种类 | varchar(10) | in (“doctor”, ~~“patient”,~~ “manager” ) |
 
 #### 用户设备对应关系Own
 
 该关系表示userID用户（患者）对应facID（体温、心率）
 
-|  列名  |    说明    |    类型     | 约束 |
-| :----: | :--------: | :---------: | :--: |
-| userID | 对应用户ID | varchar(20) |      |
-| facID  | 对应设备ID | varchar(20) |      |
+|    列名    |      说明      |      类型       | 约束 |
+| :--------: | :------------: | :-------------: | :--: |
+|   userID   |   对应用户ID   |   varchar(20)   |      |
+| ~~facID~~  | ~~对应设备ID~~ | ~~varchar(20)~~ |      |
+| **wardID** |     病房ID     |   varchar(20)   |      |
+| **bedID**  |     病床ID     |   varchar(20)   |      |
 
 #### 数据Data
 
 |  列名  |    说明    |    类型     | 约束 |
 | :----: | :--------: | :---------: | :--: |
-| _ID | 该记录ID编号 | INT | Primary Key |
+| _ID | 该记录ID编号 |  varchar(20)   | Primary Key |
 | facID | 对应设备ID | varchar(20) |      |
 | time | 数据接收的时间 | datetime |      |
-| location | 设备发送消息时所处的经纬度 | varchar(50) | |
-| **wradID** | **病房ID** | **INT** | |
+| location_lat | 纬度 | demical(3, 10) | |
+| location_lng | 设备发送消息时所处的经纬度 | demical(3, 10) | |
 | type | 数据类型 | varchar(15) | in (“normal”, “warning”) |
 | amount | 具体数据值 | demical(3, 2) | |
 
