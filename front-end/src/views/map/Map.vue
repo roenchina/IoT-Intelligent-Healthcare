@@ -273,8 +273,8 @@ export default {
       const params = {
         limit: 100,
         sort: "recent",
-        startTime: "",
-        endTime: "",
+        // startTime: "",
+        // endTime: "",
       };
       getAllData(params)
         .then((res) => {

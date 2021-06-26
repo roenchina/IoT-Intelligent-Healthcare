@@ -14,7 +14,7 @@ export function getAllFacility() {
 export function removeFacility(data) {
   return request({
     url: '/facility/removeFacility',
-    method: 'put',
+    method: 'post',
     data: data,
   });
 }
@@ -24,7 +24,7 @@ export function removeFacility(data) {
 export function updateFacility(newdata) {
   return request({
     url: '/facility/updateFacility',
-    method: 'put',
+    method: 'post',
     data: newdata,
   });
 }
@@ -39,9 +39,9 @@ export function addFacility(newdata) {
   });
 }
 
-export function getFacCount() {
-  return request({
-    url: '/facility/getFacCount',
-    method: 'get',
-  });
-}
+// export function getFacCount() {
+//   return request({
+//     url: '/facility/getFacCount',
+//     method: 'get',
+//   });
+// }

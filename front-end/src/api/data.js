@@ -14,7 +14,7 @@ export function getBasicStatic() {
 export function getAllData(data) {
   return request({
     url: '/data/getAllData',
-    method: 'get',
+    method: 'post',
     data: data,
   });
 }

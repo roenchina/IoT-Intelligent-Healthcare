@@ -381,6 +381,7 @@ export default {
       // 数据修改相关
       editVisible: false,
       editForm: {
+        facID: "",
         name: "",
         type: "temp",
         status: "online",
