@@ -1,7 +1,12 @@
-'''
-功能：设置项目常量，如DB连接参数
-使用：在app.py中使用 app.config.from_object('config') 注册配置
-'''
-# 配置 sqlalchemy  "数据库驱动://数据库用户名:密码@主机地址:端口/数据库?编码"
-SQLALCHEMY_DATABASE_URI = "mysql://root:1@localhost:3306/bsdb"
+HOST = 'localhost'
+PORT = '3306'
+DATABASE = 'bsdb'
+USERNAME = 'root'
+PASSWORD = '1'
+
+DB_URI = "mysql://{username}:{password}@{host}:{port}/{db}?charset=utf8".format(
+    username=USERNAME, password=PASSWORD, host=HOST, port=PORT, db=DATABASE)
+
+SQLALCHEMY_DATABASE_URI = DB_URI
 SQLALCHEMY_TRACK_MODIFICATIONS = True
+SQLALCHEMY_ECHO = True
