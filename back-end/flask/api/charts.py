@@ -1,19 +1,13 @@
-'''
-0. 
-1. 初始化charts蓝图
-2. 使用charts蓝图注册路由url
-    @charts_blu.route('/charts/getDataPie')
-    def getDataPie():
-        pass
-
-'''
-from flask import Blueprint
+from flask import Blueprint, request, jsonify
+from database.extension import db
+from database.models import *
 
 charts_bp = Blueprint("charts_bp", __name__, url_prefix='/charts')
 
 
 @charts_bp.route('/getFacPie', methods=["GET"])
 def getFacPie():
+    
     return 'api: getFacPie'
 
 
