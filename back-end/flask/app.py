@@ -22,8 +22,8 @@ app.register_blueprint(user_bp)
 # dbtest
 # db = SQLAlchemy(app)
 
-from extension import db
-from models import *
+from database.extension import db
+from database.models import *
 db.init_app(app)
 db.create_all(app=app)
 
