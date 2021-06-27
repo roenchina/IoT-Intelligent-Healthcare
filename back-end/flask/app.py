@@ -1,5 +1,5 @@
 from flask import Flask, request
-from flask_sqlalchemy import SQLAlchemy
+# from flask_sqlalchemy import SQLAlchemy
 
 import json
 
@@ -20,29 +20,25 @@ app.register_blueprint(user_bp)
 
 
 # dbtest
-db = SQLAlchemy(app)
+# db = SQLAlchemy(app)
 
-# manager = Manager(app)
-# migrate = Migrate(app, db)
-# manager.add_command('db', MigrateCommand)
-
-
-# from extension import db
-# db.init_app(app)
-# db.create_all(app=app)
+from extension import db
+from models import *
+db.init_app(app)
+db.create_all(app=app)
 
 # Model
-class User(db.Model):
-    __tablename__ = 'user'
-    id = db.Column(db.Integer, primary_key=True)
-    money = db.Column(db.Integer)
-    def __init__(self, name, thrust):
-        self.name = name
-        self.thrust = thrust
-    def __repr__(self):
-        return '<User %r>' % self.name
-    def __str__(self):
-        return '<User %s>' % self.name
+# class User(db.Model):
+#     __tablename__ = 'user'
+#     id = db.Column(db.Integer, primary_key=True)
+#     money = db.Column(db.Integer)
+#     def __init__(self, name, thrust):
+#         self.name = name
+#         self.thrust = thrust
+#     def __repr__(self):
+#         return '<User %r>' % self.name
+#     def __str__(self):
+#         return '<User %s>' % self.name
 
 
 
@@ -70,5 +66,4 @@ def check():
 
 
 if __name__ == "__main__":
-	manager.run()
-	# app.run(debug=True)
+	app.run(debug=True)
