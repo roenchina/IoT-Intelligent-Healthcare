@@ -1,12 +1,28 @@
-from flask import Flask, request 
+from flask import Flask, request
 import json
+
+# import blueprint
+from api.charts import charts_bp
+from api.data import data_bp
+from api.facility import facility_bp
+from api.user import user_bp
+
+
+'''
+1. 从api中import蓝图 xxx_blu
+2. 定义app后，把蓝图注册到app上
+	app.register_blueprint(xxx_blu)
+'''
 
 app = Flask(__name__)
 
+app.register_blueprint(charts_bp)
+app.register_blueprint(data_bp)
+app.register_blueprint(facility_bp)
+app.register_blueprint(user_bp)
+
 
 @app.route("/testapi", methods=["POST"])
-
-
 def check():
 	return_dict = {
 		'statusCode': '200', 
