@@ -22,7 +22,7 @@
             @click="clickMarker(item.zIndex)"
           >
             <GMapInfoWindow :opened="openedMarkerID === item.zIndex">
-              <div> {{ item.info }}</div>
+              <div>{{ item.info }}</div>
             </GMapInfoWindow>
           </GMapMarker>
           <GMapPolyline
@@ -40,22 +40,6 @@
             :model="selectForm"
             class="search-form-inline"
           >
-            <!-- <el-form-item>
-              <el-input
-                v-model="selectForm.startTime"
-                placeholder="筛选开始时间"
-                clearable
-              ></el-input>
-            </el-form-item>
-
-            <el-form-item>
-              <el-input
-                v-model="selectForm.endTime"
-                placeholder="筛选终止时间"
-                clearable
-              ></el-input>
-            </el-form-item> -->
-
             <el-form-item>
               <el-input
                 v-model="selectForm.facID"
@@ -174,7 +158,7 @@
 
 // <script>
 import { getAllData } from "@/api/data.js";
-import { getAllMarkers, getAllPolyline} from "@/api/charts.js";
+import { getAllMarkers, getAllPolyline } from "@/api/charts.js";
 
 export default {
   name: "map-test",
@@ -191,18 +175,7 @@ export default {
       },
       originalMarker: [],
       originalPolyline: [],
-      originalData: [
-        // {
-        //   _ID: "10001",
-        //   facID: "5211",
-        //   time: "2021-6-23",
-        //   location: "est",
-        //   type: "normal", // normal / warning
-        //   amount: "37.2",
-        //   unit: "摄氏度", // 需要根据facID查找
-        //   facType: "体温",
-        // },
-      ],
+      originalData: [],
     };
   },
   created() {
@@ -233,8 +206,6 @@ export default {
   methods: {
     clickMarker(zIndex) {
       this.openedMarkerID = zIndex;
-      // console.log(zIndex);
-      // console.log(this.openedMarkerID);
     },
     handleResetSelecion() {
       this.showPolyline = false;
@@ -245,44 +216,34 @@ export default {
         facID: "",
       };
     },
-    handleSelect() {
-      // console.log("select");
-      // console.log(this.selectForm);
-    },
+    handleSelect() {},
     getMarkerOptions() {
       getAllMarkers()
-        .then((res) =>{
-          // this.originalMarker = res.data.list;
+        .then((res) => {
           this.originalMarker = res.data;
         })
         .catch((e) => {
           console.log(e);
           this.$message.error("getAllMarkers后端服务器超时");
-        })
+        });
     },
     getPolylineOptions() {
       getAllPolyline()
-        .then((res) =>{
-          // this.originalPolyline = res.data.list;
+        .then((res) => {
           this.originalPolyline = res.data;
         })
         .catch((e) => {
           console.log(e);
           this.$message.error("getAllPolyline后端服务器超时");
-        })
+        });
     },
     getOriginalData() {
       const params = {
         limit: 100,
         sort: "recent",
-        // startTime: "",
-        // endTime: "",
       };
       getAllData(params)
         .then((res) => {
-          // console.log("in getAllData api");
-          // console.log(res.data);
-          // this.originalData = res.data.list;
           this.originalData = res.data;
         })
         .catch((e) => {
@@ -345,5 +306,4 @@ export default {
     width: 100px;
   }
 }
-
 </style>

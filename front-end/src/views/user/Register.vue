@@ -9,18 +9,32 @@
     </div>
 
     <div class="userContent">
-      <el-form ref="registerForm" status-icon :model="registerForm" :rules="registerRules" label-width=" 80px">
-
+      <el-form
+        ref="registerForm"
+        status-icon
+        :model="registerForm"
+        :rules="registerRules"
+        label-width=" 80px"
+      >
         <el-form-item prop="name" label="姓名">
-          <el-input v-model="registerForm.name" placeholder="请输入您的姓名"></el-input>
+          <el-input
+            v-model="registerForm.name"
+            placeholder="请输入您的姓名"
+          ></el-input>
         </el-form-item>
 
         <el-form-item prop="account" label="账号">
-          <el-input v-model="registerForm.account" placeholder="请输入账号 ( 工号 / 病历号 )"></el-input>
+          <el-input
+            v-model="registerForm.account"
+            placeholder="请输入账号 ( 工号 / 病历号 )"
+          ></el-input>
         </el-form-item>
 
         <el-form-item prop="email" label="邮箱">
-          <el-input v-model="registerForm.email" placeholder="请输入您的注册邮箱"></el-input>
+          <el-input
+            v-model="registerForm.email"
+            placeholder="请输入您的注册邮箱"
+          ></el-input>
         </el-form-item>
 
         <el-form-item prop="pass" label="密码">
@@ -52,12 +66,12 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button :loading="loading" type="primary" @click="handleSubmit()">提交</el-button>
+          <el-button :loading="loading" type="primary" @click="handleSubmit()"
+            >提交</el-button
+          >
           <el-button @click="handleCancel()">返回</el-button>
         </el-form-item>
-
       </el-form>
-
     </div>
   </div>
 </template>
@@ -80,8 +94,7 @@ export default {
     var validateCheckPass = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请再次输入密码"));
-      } else 
-      if (value !== this.registerForm.pass) {
+      } else if (value !== this.registerForm.pass) {
         callback(new Error("两次输入的密码不一致"));
       } else {
         callback();
@@ -90,8 +103,7 @@ export default {
     var validateEmail = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请输入邮箱"));
-      } else 
-      if (!Util.emailReg.test(value)) {
+      } else if (!Util.emailReg.test(value)) {
         callback(new Error("请输入正确的邮箱"));
       } else {
         callback();
@@ -100,8 +112,7 @@ export default {
     var validateAccount = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请输入账号"));
-      } else 
-      if(!Util.accountReg.test(value)) {
+      } else if (!Util.accountReg.test(value)) {
         callback(new Error("请输入正确的账号"));
       } else {
         callback();
@@ -119,9 +130,13 @@ export default {
       },
       registerRules: {
         name: [{ required: true, message: "请输入用户名", trigger: "blur" }],
-        account: [{ required: true, validator: validateAccount, trigger: "blur" }],
+        account: [
+          { required: true, validator: validateAccount, trigger: "blur" },
+        ],
         pass: [{ required: true, validator: validatePass, trigger: "blur" }],
-        checkPass: [{ required: true, validator: validateCheckPass, trigger: "blur" }],
+        checkPass: [
+          { required: true, validator: validateCheckPass, trigger: "blur" },
+        ],
         email: [{ required: true, validator: validateEmail, trigger: "blur" }],
         role: [{ required: true, message: "请确定您的身份", trigger: "blur" }],
       },
@@ -135,37 +150,37 @@ export default {
         if (valid) {
           console.log("正在提交表单");
           this.loading = true;
-          const data = { 
+          const data = {
             name: this.registerForm.name,
             userID: this.registerForm.account,
             email: this.registerForm.email,
             passwd: this.registerForm.pass,
             role: this.registerForm.role,
-           };
+          };
           userRegister(data)
-          .then((res) => {
-            // console.log(res.data);
-            if(res.data.ifTrue) {
-              // 后端注册成功
-              this.$message.success("注册成功！将为您自动登录...");
-              // 将用户注册基本信息存到localStorage中，维护登录状态
-              localStorage.setItem("ls_userID", this.registerForm.account);
-              localStorage.setItem("ls_userName", this.registerForm.name);
-              localStorage.setItem("ls_userRole", this.registerForm.role);
-              localStorage.setItem("ls_userEmail", this.registerForm.email);
-              this.$router.push("/");
+            .then((res) => {
+              // console.log(res.data);
+              if (res.data.ifTrue) {
+                // 后端注册成功
+                this.$message.success("注册成功！将为您自动登录...");
+                // 将用户注册基本信息存到localStorage中，维护登录状态
+                localStorage.setItem("ls_userID", this.registerForm.account);
+                localStorage.setItem("ls_userName", this.registerForm.name);
+                localStorage.setItem("ls_userRole", this.registerForm.role);
+                localStorage.setItem("ls_userEmail", this.registerForm.email);
+                this.$router.push("/");
+                this.loading = false;
+              } else {
+                // 后端返回false
+                this.$message.error("注册失败，请联系系统管理员");
+                this.loading = false;
+              }
+            })
+            .catch(() => {
+              // request返回error
+              this.$message.error("注册失败，后端服务器超时");
               this.loading = false;
-            } else {
-              // 后端返回false
-              this.$message.error("注册失败，请联系系统管理员");
-              this.loading = false;
-            }
-          })
-          .catch(() => {
-            // request返回error
-            this.$message.error("注册失败，后端服务器超时");
-            this.loading = false;
-          });
+            });
         } else {
           // valid失败
           this.$message.error("提交失败，请检查输入后再试");
@@ -203,5 +218,4 @@ export default {
     width: 250px;
   }
 }
-
 </style>

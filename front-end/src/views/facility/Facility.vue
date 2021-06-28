@@ -10,14 +10,6 @@
 
     <div class="container">
       <div class="handle-box">
-        <!-- <el-button
-          type="primary"
-          icon="el-icon-delete"
-          class="handle-del mr10"
-          @click="delAllSelection"
-          >批量删除</el-button
-        > -->
-
         <!-- 搜索功能 -->
         <div class="export-excel-box">
           <el-button
@@ -30,7 +22,6 @@
             导出已选数据为Excel表
           </el-button>
 
-          <!-- <div style="float: right"> -->
           <el-button
             v-if="user.role == 'manager'"
             style="margin: 0 20px 20px 0"
@@ -41,7 +32,6 @@
           >
             新增设备
           </el-button>
-          <!-- </div> -->
         </div>
 
         <!-- 筛选框 -->
@@ -162,19 +152,6 @@
           sortable
         ></el-table-column>
 
-        <!-- <el-table-column label="账户余额">
-          <template #default="scope">￥{{ scope.row.money }}</template>
-        </el-table-column>
-        <el-table-column label="头像(查看大图)" align="center">
-          <template #default="scope">
-            <el-image
-              class="table-td-thumb"
-              :src="scope.row.thumb"
-              :preview-src-list="[scope.row.thumb]"
-            ></el-image>
-          </template>
-        </el-table-column> -->
-
         <el-table-column label="设备状态" align="center">
           <template #default="scope">
             <el-tag
@@ -288,10 +265,6 @@
         :rules="formRules"
         label-width="150px"
       >
-        <!-- <el-form-item label="ID">
-          <el-input disabled v-model="addForm.facID"></el-input>
-        </el-form-item> -->
-
         <el-form-item prop="name" label="设备名">
           <el-input
             v-model="addForm.name"
@@ -348,7 +321,6 @@
 </template>
 
 <script>
-// import { fetchData } from "@/api/index.js";
 import { formatJson } from "@/utils/utils";
 import {
   getAllFacility,
@@ -454,32 +426,7 @@ export default {
         },
       ],
       // 通过api从数据库获取的原始数据
-      originalData: [
-        // {
-        //   facID: "5211",
-        //   name: "hello初代机",
-        //   type: "temp",
-        //   status: "online",
-        //   unit: "摄氏度",
-        //   step: "10",
-        // },
-        // {
-        //   facID: "3699",
-        //   name: "hello二号机",
-        //   type: "humi",
-        //   status: "offline",
-        //   unit: "%",
-        //   step: "60",
-        // },
-        // {
-        //   facID: "8888",
-        //   name: "hello三号机",
-        //   type: "bodyt",
-        //   status: "error",
-        //   unit: "摄氏度",
-        //   step: "1",
-        // },
-      ],
+      originalData: [],
     };
   },
   created() {
@@ -526,17 +473,12 @@ export default {
     },
     // 多选逻辑
     handleSelectionChange(val) {
-      // console.log("handleSelectionChange");
-      // console.log(val);
       this.selectedData = val;
     },
     // 获取originalData
     getOriginalData() {
       getAllFacility()
         .then((res) => {
-          // console.log("getAllFacility");
-          // console.log(res.data);
-          // this.originalData = res.data.list;
           this.originalData = res.data;
         })
         .catch(() => {
@@ -549,25 +491,23 @@ export default {
       this.$confirm("确定要删除吗？", "提示", {
         type: "warning",
       })
-      .then(() => {
-        const data = { facID: row.facID };
-        removeFacility(data)
-          .then((res) => {
-            if (res.data.ifTrue) {
-              this.$message.success("删除成功");
-              // this.originalData.splice(index, 1);
-              // TODO 测试删除是否成功
-              this.getOriginalData();
-            } else {
-              this.$message.error("删除失败");
-            }
-          })
-          .catch((e) => {
-            console.log(e);
-            this.$message.error("removeFacility后端服务器超时");
-          });
-      })
-      .catch(() => {});
+        .then(() => {
+          const data = { facID: row.facID };
+          removeFacility(data)
+            .then((res) => {
+              if (res.data.ifTrue) {
+                this.$message.success("删除成功");
+                this.getOriginalData();
+              } else {
+                this.$message.error("删除失败");
+              }
+            })
+            .catch((e) => {
+              console.log(e);
+              this.$message.error("removeFacility后端服务器超时");
+            });
+        })
+        .catch(() => {});
     },
     handleEdit(index, row) {
       this.editForm = JSON.parse(JSON.stringify(row));
@@ -581,8 +521,9 @@ export default {
           updateFacility(submit_data)
             .then((res) => {
               if (res.data.ifTrue) {
-                this.$message.success("修改设备 " + this.editForm.facID + "成功");
-                // TODO 前后端连接后 测试修改是否成功
+                this.$message.success(
+                  "修改设备 " + this.editForm.facID + "成功"
+                );
                 this.getOriginalData(); // 刷新数据
               } else {
                 this.$message.error("修改失败");
@@ -600,13 +541,6 @@ export default {
     // Just for DEBUG
     debug_cancelEdit() {
       this.editVisible = false;
-      // console.log("cancel edit");
-      // console.log("editForm---------------");
-      // console.log(this.editForm);
-      // console.log("tableData---------------");
-      // console.log(this.tableData);
-      // console.log("originalData---------------");
-      // console.log(this.originalData);
     },
     handleAdd() {
       this.addVisible = true;
@@ -616,17 +550,13 @@ export default {
         if (valid) {
           this.addVisible = false;
           const submit_data = this.addForm;
-          // console.log("正在提交新增设备表单");
-          // console.log(submit_data);
           addFacility(submit_data)
             .then((res) => {
-              // console.log("这是服务器返回的结果");
               console.log(res);
               if (res.data.ifTrue) {
                 const newID = res.data.info.facID;
                 console.log(newID);
                 this.$message.success("增加设备 id=" + newID + "成功");
-                // TODO 前后端连接后 测试修改是否成功
 
                 // 提交成功后，清空addForm
                 this.addForm = {

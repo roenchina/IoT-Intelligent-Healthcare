@@ -44,8 +44,6 @@
             >没有账号？注册</el-button
           >
         </div>
-        <!-- <p class="login-tips">Tips : 用户名和密码随便填。</p> -->
-        <!-- <router-link  to="/register">点这里跳转</router-link> -->
       </el-form>
     </div>
   </div>
@@ -76,8 +74,6 @@ export default {
             passwd: this.loginForm.password,
           };
           userVerify(data).then((res) => {
-            // console.log("when login-----------");
-            // console.log(res.data.ifTrue);
             if (res.data.ifTrue) {
               // 验证成功
               this.$message.success("登录成功！");
@@ -109,7 +105,6 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
-  /* background-image: url(../assets/img/login-bg.jpg); */
   background-size: 100%;
 }
 .ms-title {

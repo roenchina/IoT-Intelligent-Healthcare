@@ -7,7 +7,6 @@
           <div class="user-info">
             <div class="user-info-cont">
               <div class="user-info-name">欢迎，{{ user.name }}</div>
-              <!-- <div>{{ userRole }}</div> -->
             </div>
           </div>
           <div class="user-info-list">
@@ -36,13 +35,6 @@
             <div>{{ nowDate }}</div>
             <div class="exact-time">{{ nowTime }}</div>
           </div>
-
-          <!-- Vue
-          <el-progress :percentage="71.3" color="#42b983"></el-progress
-          >JavaScript
-          <el-progress :percentage="24.1" color="#f1e05a"></el-progress>CSS
-          <el-progress :percentage="13.7"></el-progress>HTML
-          <el-progress :percentage="5.9" color="#f56c6c"></el-progress> -->
         </el-card>
       </el-col>
     </el-row>
@@ -171,9 +163,6 @@
           <template #header>
             <div class="clearfix">
               <span>最新数据记录</span>
-              <!-- <el-button style="float: right; padding: 3px 0" type="text"
-                >添加</el-button
-              > -->
             </div>
           </template>
 
@@ -185,12 +174,6 @@
             ref="multipleTable"
             header-cell-class-name="table-header"
           >
-            <!-- <el-table-column
-              type="selection"
-              align="center"
-              v-if="user.role === 'manager'"
-            ></el-table-column> -->
-
             <el-table-column
               prop="time"
               label="时间"
@@ -204,13 +187,6 @@
               align="center"
               sortable
             ></el-table-column>
-
-            <!-- <el-table-column
-              prop="wardID"
-              label="病房号"
-              align="center"
-              sortable
-            ></el-table-column> -->
 
             <el-table-column
               prop="location"
@@ -255,30 +231,6 @@
                 >
               </template>
             </el-table-column>
-
-            <!-- 管理员权限：编辑、删除 -->
-            <!-- <el-table-column
-              v-if="user.role === 'manager'"
-              label="管理员操作"
-              width="180"
-              align="center"
-            >
-              <template #default="scope">
-                <el-button
-                  type="text"
-                  icon="el-icon-edit"
-                  @click="handleEdit(scope.$index, scope.row)"
-                  >编辑</el-button
-                >
-                <el-button
-                  type="text"
-                  icon="el-icon-delete"
-                  class="red"
-                  @click="handleDelete(scope.$index, scope.row)"
-                  >删除</el-button
-                >
-              </template>
-            </el-table-column> -->
           </el-table>
         </el-card>
       </el-col>
@@ -361,26 +313,7 @@ export default {
         color: "#4ea397",
         maskColor: "rgba(255, 255, 255, 0.4)",
       },
-      recentData: [
-        // {
-        //   time: "2020-2-1 9:00:00",
-        //   facID: "001",
-        //   // wardID: "01005",
-        //   location: "est",
-        //   type: "normal", // normal / warning
-        //   amount: "37.2",
-        //   unit: "摄氏度", // 需要根据facID查找
-        // },
-        // {
-        //   time: "2020-2-1 9:00:05",
-        //   facID: "002",
-        //   // wardID: "09001",
-        //   location: "wst",
-        //   type: "warning",
-        //   amount: "38.9",
-        //   unit: "摄氏度",
-        // },
-      ],
+      recentData: [],
       basic: {
         facNum: 0,
         dataNum: 0,
@@ -424,7 +357,6 @@ export default {
         pieCatalog = ["normal", "warning"];
         newdata = this.e_dataPie;
       } else {
-        // TODO 不做改变
         pieTitle = "数据分类一览";
         pieCatalog = ["normal", "warning"];
         newdata = this.e_dataPie;
@@ -461,9 +393,6 @@ export default {
         ],
         toolbox: {
           feature: {
-            // dataZoom: {
-            //     yAxisIndex: 'none'
-            // },
             saveAsImage: {},
           },
         },
@@ -505,8 +434,6 @@ export default {
           {
             type: "line",
             smooth: true,
-            // TODO 确定要不要动画
-            // animation: false,
           },
         ],
         tooltip: {
@@ -521,9 +448,6 @@ export default {
 
         toolbox: {
           feature: {
-            // dataZoom: {
-            //     yAxisIndex: 'none'
-            // },
             saveAsImage: {},
             magicType: {
               type: ["line", "bar"],
@@ -570,8 +494,6 @@ export default {
     getBasicStatic_() {
       getBasicStatic()
         .then((res) => {
-          // console.log("---in getBasicStatic---");
-          // console.log(res.data);
           this.basic = res.data;
         })
         .catch(() => {
@@ -585,9 +507,6 @@ export default {
       };
       getAllData(params)
         .then((res) => {
-          // console.log("---in getAllDat.a---");
-          // console.log(res.data);
-          // this.recentData = res.data.list;
           this.recentData = res.data;
         })
         .catch((e) => {
@@ -611,15 +530,12 @@ export default {
         this.checkDigit(icnow.getHours()) +
         ":" +
         this.checkDigit(icnow.getMinutes());
-      // + ':' + this.checkDigit(icnow.getSeconds())
     },
     getEchartsData() {
       // pie
       getFacPie()
         .then((res) => {
           this.e_facPie = res.data;
-          // console.log("get e_facPie");
-          // console.log(this.e_facPie);
         })
         .catch((e) => {
           console.log(e);
@@ -629,8 +545,6 @@ export default {
       getDataPie()
         .then((res) => {
           this.e_dataPie = res.data;
-          // console.log("get e_dataPie");
-          // console.log(this.e_dataPie);
         })
         .catch((e) => {
           console.log(e);
@@ -641,8 +555,6 @@ export default {
       getAllLine()
         .then((res) => {
           this.e_lineData = res.data;
-          // console.log("get e_lineData");
-          // console.log(this.e_lineData);
         })
         .catch((e) => {
           console.log(e);
@@ -744,7 +656,6 @@ export default {
 .user-info-list span {
   margin-left: 0px;
   float: right;
-  /* align-items: right; */
 }
 
 .mgb20 {

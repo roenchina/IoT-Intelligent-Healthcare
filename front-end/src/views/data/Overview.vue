@@ -20,17 +20,6 @@
         >
           导出已选数据为Excel表
         </el-button>
-
-        <!-- <el-button
-          v-if="user.role == 'manager'"
-          style="margin: 0 20px 20px 0"
-          type="primary"
-          plain
-          icon="el-icon-lx-add"
-          @click="handleAdd"
-        >
-          新增设备
-        </el-button> -->
       </div>
 
       <div class="data-fliter-box">
@@ -99,10 +88,7 @@
         :default-sort="{ prop: 'time', order: 'descending' }"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column
-          type="selection"
-          align="center"
-        ></el-table-column>
+        <el-table-column type="selection" align="center"></el-table-column>
 
         <el-table-column
           prop="_ID"
@@ -124,13 +110,6 @@
           align="center"
           sortable
         ></el-table-column>
-
-        <!-- <el-table-column
-          prop="wardID"
-          label="病房号"
-          align="center"
-          sortable
-        ></el-table-column> -->
 
         <el-table-column
           prop="location"
@@ -184,12 +163,6 @@
           align="center"
         >
           <template #default="scope">
-            <!-- <el-button
-              type="text"
-              icon="el-icon-edit"
-              @click="handleEdit(scope.$index, scope.row)"
-              >编辑</el-button
-            > -->
             <el-button
               type="text"
               icon="el-icon-delete"
@@ -205,7 +178,6 @@
 </template>
 
 <script>
-// import { fetchData } from "@/api/index.js";
 import { formatJson } from "@/utils/utils";
 import { getAllData, deleteData } from "@/api/data.js";
 export default {
@@ -257,28 +229,7 @@ export default {
           label: "心率",
         },
       ],
-      originalData: [
-        // {
-        //   _ID: "10001",
-        //   facID: "5211",
-        //   time: "2021-6-23",
-        //   location: "est",
-        //   type: "normal", // normal / warning
-        //   amount: "37.2",
-        //   unit: "摄氏度", // 需要根据facID查找
-        //   facType: "体温",
-        // },
-        // {
-        //   _ID: "10008",
-        //   facID: "002",
-        //   time: "2020-2-1",
-        //   location: "wst",
-        //   type: "warning",
-        //   amount: "38.9",
-        //   unit: "摄氏度",
-        //   facType: "体温",
-        // },
-      ],
+      originalData: [],
     };
   },
   created() {
@@ -339,8 +290,6 @@ export default {
         });
     },
     handleSelectionChange(val) {
-      // console.log("handleSelectionChange");
-      // console.log(val);
       this.selectedData = val;
     },
     getOriginalData() {
@@ -350,9 +299,6 @@ export default {
       };
       getAllData(params)
         .then((res) => {
-          // console.log("---in getAllData---");
-          // console.log(res.data);
-          // this.originalData = res.data.list;
           this.originalData = res.data;
         })
         .catch((e) => {
@@ -364,25 +310,23 @@ export default {
       this.$confirm("确定要删除吗？", "提示", {
         type: "warning",
       })
-      .then(() => {
-        const data = { _ID: row._ID };
-        deleteData(data)
-          .then((res) => {
-            if (res.data.ifTrue) {
-              this.$message.success("删除成功");
-              // this.originalData.splice(index, 1);
-              // TODO 测试删除是否成功
-              this.getOriginalData();
-            } else {
-              this.$message.error("删除失败");
-            }
-          })
-          .catch((e) => {
-            console.log(e);
-            this.$message.error("deleteData后端服务器超时");
-          });
-      })
-      .catch(() => {});
+        .then(() => {
+          const data = { _ID: row._ID };
+          deleteData(data)
+            .then((res) => {
+              if (res.data.ifTrue) {
+                this.$message.success("删除成功");
+                this.getOriginalData();
+              } else {
+                this.$message.error("删除失败");
+              }
+            })
+            .catch((e) => {
+              console.log(e);
+              this.$message.error("deleteData后端服务器超时");
+            });
+        })
+        .catch(() => {});
     },
   },
 };
@@ -434,5 +378,4 @@ export default {
     width: 100px;
   }
 }
-
 </style>
