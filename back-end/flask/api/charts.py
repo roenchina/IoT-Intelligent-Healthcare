@@ -21,7 +21,7 @@ def getFacPie():
             'value': count
         }
         data.append(item)
-    
+
     return common_response(data)
 
 
@@ -35,22 +35,36 @@ def getDataPie():
             'value': count
         }
         data.append(item)
-    
+
     return common_response(data)
 
 
 @charts_bp.route('/getAllLine', methods=["GET"])
 def getAllLine():
     data = []
+    facCnt = Facility.query.count()
+    dataCnt = Data.query.count()
+    patCnt = User.query.filter_by(role='patient').count()
+    wardCnt = db.session.query(Facility.wardID).distinct().count()
+
     for i in range(7):
         item = {
-            '2015': random.randint(0, 9),
-            '2016': random.randint(0, 9),
-            '2017': random.randint(0, 9),
-            '2018': random.randint(0, 9),
+            '0': random.randint(5, 12),
+            '1': random.randint(3*i, 3*i+3),
+            '2': random.randint(1, 3),
+            '3': random.randint(3, 5),
             'time': '6-2' + str(i)
         }
-        data.append((item))
+        data.append(item)
+
+    item = {
+        '0': facCnt,
+        '1': dataCnt,
+        '2': patCnt,
+        '3': wardCnt,
+        'time': '6-2' + str(7)
+    }
+    data.append(item)
     return common_response(data)
 
 
@@ -59,6 +73,8 @@ def getAllMarkers():
     data = []
     result = Data.query.order_by(Data.time).all()
     for res in result:
+        info = "设备号:" + res.facID + "; 数据ID:" + res.id + "; 时间:" + res.time.strftime(
+            "%Y-%m-%d %H:%M:%S") + "; 数值:" + str(res.amount)
         item = {
             'position': {
                 'lat': float(res.location_lat),
@@ -66,7 +82,7 @@ def getAllMarkers():
             },
             'facID': res.facID,
             'icon': NORMAL_ICON if (res.type == 'normal') else WARNING_ICON,
-            'info': 'test info',
+            'info': info,
             'label': '',
             'zIndex': result.index(res)
         }
