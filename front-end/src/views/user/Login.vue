@@ -76,7 +76,7 @@ export default {
             passwd: this.loginForm.password,
           };
           userVerify(data).then((res) => {
-            console.log("when login-----------");
+            // console.log("when login-----------");
             // console.log(res.data.ifTrue);
             if (res.data.ifTrue) {
               // 验证成功

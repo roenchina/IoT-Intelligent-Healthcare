@@ -395,6 +395,8 @@ export default {
         status: "online",
         unit: "",
         step: "",
+        wardID: "999",
+        bedID: "99",
       },
       formRules: {
         name: [{ required: true, message: "请输入设备名", trigger: "blur" }],
@@ -453,30 +455,30 @@ export default {
       ],
       // 通过api从数据库获取的原始数据
       originalData: [
-        {
-          facID: "5211",
-          name: "hello初代机",
-          type: "temp",
-          status: "online",
-          unit: "摄氏度",
-          step: "10",
-        },
-        {
-          facID: "3699",
-          name: "hello二号机",
-          type: "humi",
-          status: "offline",
-          unit: "%",
-          step: "60",
-        },
-        {
-          facID: "8888",
-          name: "hello三号机",
-          type: "bodyt",
-          status: "error",
-          unit: "摄氏度",
-          step: "1",
-        },
+        // {
+        //   facID: "5211",
+        //   name: "hello初代机",
+        //   type: "temp",
+        //   status: "online",
+        //   unit: "摄氏度",
+        //   step: "10",
+        // },
+        // {
+        //   facID: "3699",
+        //   name: "hello二号机",
+        //   type: "humi",
+        //   status: "offline",
+        //   unit: "%",
+        //   step: "60",
+        // },
+        // {
+        //   facID: "8888",
+        //   name: "hello三号机",
+        //   type: "bodyt",
+        //   status: "error",
+        //   unit: "摄氏度",
+        //   step: "1",
+        // },
       ],
     };
   },
@@ -534,7 +536,8 @@ export default {
         .then((res) => {
           // console.log("getAllFacility");
           // console.log(res.data);
-          this.originalData = res.data.list;
+          // this.originalData = res.data.list;
+          this.originalData = res.data;
         })
         .catch(() => {
           this.$message.error("getAllFacility后端服务器超时");
@@ -578,7 +581,7 @@ export default {
           updateFacility(submit_data)
             .then((res) => {
               if (res.data.ifTrue) {
-                this.$message.success("修改设备 ${this.editForm.facID} 成功");
+                this.$message.success("修改设备 " + this.editForm.facID + "成功");
                 // TODO 前后端连接后 测试修改是否成功
                 this.getOriginalData(); // 刷新数据
               } else {
@@ -618,11 +621,11 @@ export default {
           addFacility(submit_data)
             .then((res) => {
               // console.log("这是服务器返回的结果");
-              // console.log(res);
+              console.log(res);
               if (res.data.ifTrue) {
                 const newID = res.data.info.facID;
                 console.log(newID);
-                this.$message.success("增加设备 ${newID} 成功");
+                this.$message.success("增加设备 id=" + newID + "成功");
                 // TODO 前后端连接后 测试修改是否成功
 
                 // 提交成功后，清空addForm
@@ -635,7 +638,7 @@ export default {
                 };
                 this.getOriginalData(); // 刷新数据
               } else {
-                this.$message.error("增加失败");
+                this.$message.error("增加失败" + res.data.message);
               }
             })
             .catch((e) => {

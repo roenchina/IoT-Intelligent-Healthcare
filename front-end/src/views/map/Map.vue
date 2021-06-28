@@ -13,7 +13,7 @@
           api-key="AIzaSyBHyiVWRgD6L3Zvgn7dFGL0N5ytYVaJmWM"
           style="width: 100%; height: 500px"
           :center="mapCenter"
-          :zoom="14"
+          :zoom="17"
         >
           <GMapMarker
             v-for="item in selectedMarker"
@@ -183,7 +183,7 @@ export default {
     return {
       showPolyline: false,
       openedMarkerID: -1,
-      mapCenter: { lat: 40.689247, lng: -74.044502 },
+      mapCenter: { lat: 30.274752, lng: 120.131842 },
       selectForm: {
         startTime: "",
         endTime: "",
@@ -252,7 +252,8 @@ export default {
     getMarkerOptions() {
       getAllMarkers()
         .then((res) =>{
-          this.originalMarker = res.data.list;
+          // this.originalMarker = res.data.list;
+          this.originalMarker = res.data;
         })
         .catch((e) => {
           console.log(e);
@@ -262,7 +263,8 @@ export default {
     getPolylineOptions() {
       getAllPolyline()
         .then((res) =>{
-          this.originalPolyline = res.data.list;
+          // this.originalPolyline = res.data.list;
+          this.originalPolyline = res.data;
         })
         .catch((e) => {
           console.log(e);
@@ -280,7 +282,8 @@ export default {
         .then((res) => {
           // console.log("in getAllData api");
           // console.log(res.data);
-          this.originalData = res.data.list;
+          // this.originalData = res.data.list;
+          this.originalData = res.data;
         })
         .catch((e) => {
           console.log(e);

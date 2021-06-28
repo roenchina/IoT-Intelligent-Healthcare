@@ -352,7 +352,8 @@ export default {
         .then((res) => {
           // console.log("---in getAllData---");
           // console.log(res.data);
-          this.originalData = res.data.list;
+          // this.originalData = res.data.list;
+          this.originalData = res.data;
         })
         .catch((e) => {
           console.log(e);

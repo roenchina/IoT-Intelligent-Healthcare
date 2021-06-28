@@ -580,14 +580,15 @@ export default {
     },
     getDetailData() {
       const params = {
-        limit: 20,
+        limit: 5,
         sort: "recent",
       };
       getAllData(params)
         .then((res) => {
-          // console.log("---in getAllData---");
+          // console.log("---in getAllDat.a---");
           // console.log(res.data);
-          this.recentData = res.data.list;
+          // this.recentData = res.data.list;
+          this.recentData = res.data;
         })
         .catch((e) => {
           console.log(e);
