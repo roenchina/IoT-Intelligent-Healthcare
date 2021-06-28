@@ -80,7 +80,7 @@ def getAllPolyline():
     data = []
     allFacID = Facility.query.all()
     for fac in allFacID:
-        print(fac.id)
+        # print(fac.id)
         item = {
             'facID': fac.id,
             'path': [],
@@ -90,10 +90,10 @@ def getAllPolyline():
             "strokeWeight": 4,
         }
         for res in fac.alldata:
-            print(res.id)
+            # print(res.id)
             marker = {
-                'lat': float(res.location_lat),
                 'lng': float(res.location_lng),
+                'lat': float(res.location_lat),
             }
             item['path'].append(marker)
         if(item['path']):

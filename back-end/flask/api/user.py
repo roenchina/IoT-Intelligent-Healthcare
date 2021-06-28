@@ -35,6 +35,7 @@ def userRegister():
 def userVerify():
     data = {}
     request_json = request.get_json()
+    # print(request_json)
     res = User.query.get(request_json['userID'])
     if (res):
         if (res.passwd == request_json['passwd']):
