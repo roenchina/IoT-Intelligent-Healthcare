@@ -417,4 +417,22 @@ export default {
   width: 40px;
   height: 40px;
 }
+@media screen and (max-width: 1200px) {
+  .el-form-item .el-input {
+    width: 150px;
+  }
+  .el-form-item .el-select {
+    width: 150px;
+  }
+}
+
+@media screen and (max-width: 850px) {
+  .el-form-item .el-input {
+    width: 100px;
+  }
+  .el-form-item .el-select {
+    width: 100px;
+  }
+}
+
 </style>
