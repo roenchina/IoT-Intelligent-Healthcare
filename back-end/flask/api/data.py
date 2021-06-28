@@ -14,10 +14,10 @@ def getBasicStatic():
     patCnt = User.query.filter_by(role='patient').count()
     wardCnt = db.session.query(Facility.wardID).distinct().count()
     data = {
-        "facNum": facCnt,
-        "dataNum": dataCnt,
-        "patientNum": patCnt,
-        "wardNum": wardCnt
+        'facNum': facCnt,
+        'dataNum': dataCnt,
+        'patientNum': patCnt,
+        'wardNum': wardCnt
     }
     return common_response(data)
 
@@ -37,20 +37,20 @@ def getAllData():
     for res in result:
         fac = Facility.query.get(res.facID)
         item = {
-            "_ID": res.id,
-            # "time": res.time,
-            # "time": datetime.strptime(str(res.time), "%Y-%m-%d %H:%M:%S").strftime("%Y-%m-%d %H:%M:%S"),
-            "time": res.time.strftime("%Y-%m-%d %H:%M:%S"),
-            "facID": res.facID,
-            "location": "(" + str(res.location_lat) + ", " + str(res.location_lng) + ")",
-            "location_lat": float(res.location_lat),
-            "location_lng": float(res.location_lng),
-            "type": res.type,
-            "amount": float(res.amount),
-            "unit": fac.unit if fac else "",
-            "facType": fac.type if fac else ""
+            '_ID': res.id,
+            # 'time': res.time,
+            # 'time': datetime.strptime(str(res.time), "%Y-%m-%d %H:%M:%S").strftime("%Y-%m-%d %H:%M:%S"),
+            'time': res.time.strftime("%Y-%m-%d %H:%M:%S"),
+            'facID': res.facID,
+            'location': "(" + str(res.location_lat) + ", " + str(res.location_lng) + ")",
+            'location_lat': float(res.location_lat),
+            'location_lng': float(res.location_lng),
+            'type': res.type,
+            'amount': float(res.amount),
+            'unit': fac.unit if fac else "",
+            'facType': fac.type if fac else ""
         }
-        data.append((item))
+        data.append(item)
     
     return common_response(data)
 
@@ -73,7 +73,8 @@ def deleteData():
             db.session.delete(target)
             db.session.commit()
             data = {
-                'ifTrue': True
+                'ifTrue': True,
+                'message': 'delete success'
             }
         else:
             # 不存在
