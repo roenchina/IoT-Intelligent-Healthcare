@@ -10,3 +10,5 @@ DB_URI = "mysql://{username}:{password}@{host}:{port}/{db}?charset=utf8".format(
 SQLALCHEMY_DATABASE_URI = DB_URI
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 SQLALCHEMY_ECHO = False
+
+JSON_AS_ASCII = False

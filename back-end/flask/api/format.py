@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import jsonify, make_response
 from werkzeug.http import HTTP_STATUS_CODES
 from database.extension import db
 
@@ -17,6 +17,11 @@ def bad_request(message):
 
 
 def common_response(data):
-    return jsonify({
+    json_data = jsonify({
         'data': data,
     })
+    response = make_response(json_data)
+    response.sattus = '200'
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = 'PUT, GET, POST, DELETE'
+    return response
