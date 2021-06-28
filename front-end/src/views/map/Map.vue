@@ -192,16 +192,16 @@ export default {
       originalMarker: [],
       originalPolyline: [],
       originalData: [
-        {
-          _ID: "10001",
-          facID: "5211",
-          time: "2021-6-23",
-          location: "est",
-          type: "normal", // normal / warning
-          amount: "37.2",
-          unit: "摄氏度", // 需要根据facID查找
-          facType: "体温",
-        },
+        // {
+        //   _ID: "10001",
+        //   facID: "5211",
+        //   time: "2021-6-23",
+        //   location: "est",
+        //   type: "normal", // normal / warning
+        //   amount: "37.2",
+        //   unit: "摄氏度", // 需要根据facID查找
+        //   facType: "体温",
+        // },
       ],
     };
   },

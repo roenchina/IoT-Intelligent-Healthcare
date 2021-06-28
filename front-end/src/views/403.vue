@@ -36,7 +36,7 @@ export default {
 }
 .error-code {
   line-height: 1;
-  font-size: 250px;
+  font-size: 20vw;
   font-weight: bolder;
   color: #f02d2d;
 }
@@ -44,7 +44,7 @@ export default {
   color: #00a854;
 }
 .error-desc {
-  font-size: 30px;
+  font-size:5vw;
   color: #777;
 }
 .error-handle {
@@ -52,6 +52,6 @@ export default {
   padding-bottom: 200px;
 }
 .error-btn {
-  margin-left: 100px;
+  margin-left: 5vw;
 }
 </style>

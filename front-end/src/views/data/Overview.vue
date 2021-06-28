@@ -258,26 +258,26 @@ export default {
         },
       ],
       originalData: [
-        {
-          _ID: "10001",
-          facID: "5211",
-          time: "2021-6-23",
-          location: "est",
-          type: "normal", // normal / warning
-          amount: "37.2",
-          unit: "摄氏度", // 需要根据facID查找
-          facType: "体温",
-        },
-        {
-          _ID: "10008",
-          facID: "002",
-          time: "2020-2-1",
-          location: "wst",
-          type: "warning",
-          amount: "38.9",
-          unit: "摄氏度",
-          facType: "体温",
-        },
+        // {
+        //   _ID: "10001",
+        //   facID: "5211",
+        //   time: "2021-6-23",
+        //   location: "est",
+        //   type: "normal", // normal / warning
+        //   amount: "37.2",
+        //   unit: "摄氏度", // 需要根据facID查找
+        //   facType: "体温",
+        // },
+        // {
+        //   _ID: "10008",
+        //   facID: "002",
+        //   time: "2020-2-1",
+        //   location: "wst",
+        //   type: "warning",
+        //   amount: "38.9",
+        //   unit: "摄氏度",
+        //   facType: "体温",
+        // },
       ],
     };
   },

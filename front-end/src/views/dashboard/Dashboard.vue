@@ -362,24 +362,24 @@ export default {
         maskColor: "rgba(255, 255, 255, 0.4)",
       },
       recentData: [
-        {
-          time: "2020-2-1 9:00:00",
-          facID: "001",
-          // wardID: "01005",
-          location: "est",
-          type: "normal", // normal / warning
-          amount: "37.2",
-          unit: "摄氏度", // 需要根据facID查找
-        },
-        {
-          time: "2020-2-1 9:00:05",
-          facID: "002",
-          // wardID: "09001",
-          location: "wst",
-          type: "warning",
-          amount: "38.9",
-          unit: "摄氏度",
-        },
+        // {
+        //   time: "2020-2-1 9:00:00",
+        //   facID: "001",
+        //   // wardID: "01005",
+        //   location: "est",
+        //   type: "normal", // normal / warning
+        //   amount: "37.2",
+        //   unit: "摄氏度", // 需要根据facID查找
+        // },
+        // {
+        //   time: "2020-2-1 9:00:05",
+        //   facID: "002",
+        //   // wardID: "09001",
+        //   location: "wst",
+        //   type: "warning",
+        //   amount: "38.9",
+        //   unit: "摄氏度",
+        // },
       ],
       basic: {
         facNum: 0,
@@ -471,24 +471,24 @@ export default {
       return option;
     },
     lineOption() {
-      var dim = ["time", "2015", "2016", "2017", "2018"];
+      var dim = ["time", "0", "1", "2", "3"];
       var title_text = "title";
       // var ser = [{ type: "line" }];
       if (this.showDataID == 1) {
-        dim = ["time", "2015"];
-        title_text = "2015";
+        dim = ["time", "0"];
+        title_text = "一周活跃设备数";
         // ser = [{ type: "line" }];
       } else if (this.showDataID == 2) {
-        dim = ["time", "2016"];
-        title_text = "2016";
+        dim = ["time", "1"];
+        title_text = "一周总数据量";
         // ser = [{ type: "line" }];
       } else if (this.showDataID == 3) {
-        dim = ["time", "2017"];
-        title_text = "2017";
+        dim = ["time", "2"];
+        title_text = "一周注册患者数";
         // ser = [{ type: "line" }];
       } else if (this.showDataID == 4) {
-        dim = ["time", "2018"];
-        title_text = "2018";
+        dim = ["time", "3"];
+        title_text = "一周活跃病房数";
       }
       const option = {
         title: {

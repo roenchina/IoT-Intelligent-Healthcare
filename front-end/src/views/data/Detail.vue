@@ -86,7 +86,7 @@ export default {
       },
       lineOption: {
         title: {
-          text: "001号病房一周温湿度",
+          text: "你所在的病房 - 一周温湿度",
           subtext: "仅供测试",
         },
         tooltip: {
@@ -112,55 +112,68 @@ export default {
           boundaryGap: false,
           data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
         },
-        yAxis: {
-          type: "value",
-          axisLabel: {
-            formatter: "{value} °C",
+        yAxis: [
+          {
+            type: "value",
+            name: "温度",
+            axisLabel: {
+              formatter: " {value} °C",
+            },
           },
-        },
+          {
+            type: "value",
+            name: "湿度",
+            axisLabel: {
+              formatter: "{value} %",
+            },
+          }
+        ],
         series: [
           {
             name: "温度",
             type: "line",
             data: [10, 11, 13, 11, 12, 12, 9],
+            yAxisIndex: '0',
             // markPoint: {
             //   data: [
             //     { type: "max", name: "最大值" },
             //     { type: "min", name: "最小值" },
             //   ],
             // },
-            markLine: {
-              data: [{ type: "average", name: "平均值" }],
-            },
+            // markLine: {
+            //   data: [{ type: "average", name: "平均值" }],
+            // },
           },
           {
             name: "湿度",
             type: "line",
             data: [30, 41, 39, 50, 76, 70, 50],
+            yAxisIndex: '1',
+
             // markPoint: {
             //   data: [{ name: "周最低", value: -2, xAxis: 1, yAxis: -1.5 }],
             // },
-            markLine: {
-              data: [
-                { type: "average", name: "平均值" },
-                [
-                  {
-                    symbol: "none",
-                    x: "90%",
-                    yAxis: "max",
-                  },
-                  {
-                    symbol: "circle",
-                    label: {
-                      position: "start",
-                      formatter: "最大值",
-                    },
-                    type: "max",
-                    name: "最高点",
-                  },
-                ],
-              ],
-            },
+            // markLine: {
+            //   data: [
+            //     { type: "average", name: "平均值" },
+            //     [
+            //       {
+            //         symbol: "none",
+            //         x: "90%",
+            //         yAxis: "max",
+            //       },
+            //       {
+            //         symbol: "circle",
+            //         label: {
+            //           position: "start",
+            //           formatter: "最大值",
+            //         },
+            //         type: "max",
+            //         name: "最高点",
+            //       },
+            //     ],
+            //   ],
+            // },
           },
         ],
       },
