@@ -38,8 +38,8 @@ class Data(db.Model):
     id = db.Column(db.String(10), primary_key=True)
     # facID = db.Column(db.String(10))
     time = db.Column(db.DateTime, nullable=False, default=datetime.now())
-    location_lat = db.Column(db.Numeric(9, 6), nullable=False)
     location_lng = db.Column(db.Numeric(9, 6), nullable=False)
+    location_lat = db.Column(db.Numeric(9, 6), nullable=False)
     type = db.Column(db.Enum('normal', 'warning'), default='normal', nullable=False)
     amount = db.Column(db.Numeric(5, 2), nullable=False)
 
