@@ -88,6 +88,10 @@ INSERT INTO `tb_data` VALUES ('3001102', '2021-06-27 8:30:00', 120.132242, 30.27
 INSERT INTO `tb_data` VALUES ('4001101', '2021-06-27 8:05:00', 120.133142, 30.274460, 'normal', '80', '40011');
 INSERT INTO `tb_data` VALUES ('4001102', '2021-06-27 8:10:00', 120.132142, 30.275252, 'normal', '82', '40011');
 
+INSERT INTO `tb_data` VALUES ('1000801', '2021-06-27 08:20:00', 120.131942, 30.272552, 'normal', '27.1', '10008');
+INSERT INTO `tb_data` VALUES ('1000802', '2021-06-27 08:50:00', 120.130542, 30.273252, 'warning', '10.2', '10008');
+INSERT INTO `tb_data` VALUES ('1000803', '2021-06-27 09:20:00', 120.133042, 30.273952, 'warning', '10.1', '10008');
+
 -- user
 INSERT INTO `tb_user` VALUES ('3180105412', 'Yu Ruohan(test_manager)', "3180105412@zju.edu.cn", '123456', 'manager');
 INSERT INTO `tb_user` VALUES ('3180101111', 'test_patient', "12345678@example.com", '123456', 'patient');
