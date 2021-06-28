@@ -24,4 +24,5 @@ def common_response(data):
     response.sattus = '200'
     response.headers['Access-Control-Allow-Origin'] = '*'
     response.headers['Access-Control-Allow-Methods'] = 'PUT, GET, POST, DELETE'
+    response.headers['Access-Control-Allow-Headers'] = 'content-type'
     return response

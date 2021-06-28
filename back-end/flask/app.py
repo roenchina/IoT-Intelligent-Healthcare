@@ -1,9 +1,11 @@
 from flask import Flask, request
+from flask_cors import CORS
 import json
 
 
 app = Flask(__name__)
 app.config.from_pyfile("configs.py")
+cors = CORS(app)
 
 
 from database.extension import db
