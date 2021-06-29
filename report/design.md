@@ -743,6 +743,12 @@ API的具体文档已经通过Postman导出：[Postman Document 2021iot](https:/
 
 
 
+4. 输入正确的账号密码，显示“登录成功”，并直接跳转到主页：
+
+![image-20210629224158920](assets/image-20210629224158920.png)
+
+
+
 ### 1.2 注册
 
 注册信息需要满足以下规范：
@@ -860,7 +866,7 @@ API的具体文档已经通过Postman导出：[Postman Document 2021iot](https:/
 
 
 
-3. Mobile尺寸
+3. 移动设备尺寸
 
 此处使用模型为iPhone 6/7/8 Plus。
 
@@ -978,6 +984,10 @@ API的具体文档已经通过Postman导出：[Postman Document 2021iot](https:/
 （图中显示为初始状态和局部放大后的状态）
 
 <img src="assets/image-20210629221309225.png" alt="image-20210629221309225" style="zoom:50%;" /> <img src="assets/image-20210629221415839.png" alt="image-20210629221415839" style="zoom:50%;" />
+
+以下是移动设备中显示的地图界面：
+
+![image-20210629224320329](assets/image-20210629224320329.png)
 
 
 
@@ -1131,6 +1141,10 @@ API的具体文档已经通过Postman导出：[Postman Document 2021iot](https:/
 以下是移动设备中显示的403界面：
 
 ![image-20210629223616182](assets/image-20210629223616182.png)
+
+
+
+
 
 
 
