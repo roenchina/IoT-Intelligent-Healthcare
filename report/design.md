@@ -247,13 +247,13 @@
 
    
 
-3. **对比分析功能（未实现）
+3. **对比分析功能**（未实现）
 
    用户可以不局限于分析单个传感器设备的历史数据（功能4）、或是所有设备某一时刻的数据（功能5），用户可以选择多个传感器，对比分析它们的历史数据。如：选择一个病人的“体温”和“心率”两种数据，综合分析病况；选择多个病人的“体温”数据，对比分析。
 
    
 
-4. **多样的可视分析功能（基本实现）
+4. **多样的可视分析功能**（基本实现）
 
    对于这一一个数据量大的平台，我们可以使用多种可视化工具辅助数据分析。可以使用的图表形式有：散点图、玫瑰图、热力图等等。目前有许多成熟的前端可视化组件可以利用。
 
@@ -303,54 +303,168 @@
 
 项目整体上采取的是Browser/Server架构，并采用了前后端分离的开发模式。
 
-后端负责提供接口，操作数据库提供给前端所需的数据和状态；前端负责调用接口，将数据展示给用户，并对用户的操作进行简单处理转发给后端，同时还要负责接收来自传感器的数据；数据库负责存储数据。在实际应用场景中，用户可以通过浏览器在不同的网页界面之间浏览，根据网页所需要的数据和用户的操作，浏览器会发出HTTP请求向后端服务器请求数据。后端的MQTT服务器同时在接受来自传感器发送的数据，并存储到数据库中。
+后端负责提供接口，操作数据库、获取需要提供给前端所需的数据和状态，同时还要负责接收来自传感器的数据；前端负责调用接口，将数据展示给用户，并对用户的操作进行简单处理转发给后端；数据库负责存储数据，维护数据之间的约束。
+
+在实际应用场景中，用户可以通过浏览器在不同的网页界面之间浏览，并发起一定的操作。根据网页所需要的数据和用户的操作，浏览器会发出HTTP请求向后端服务器请求数据。后端运行的服务器接收来自前端的请求，根据前端传来的参数对数据库进行增删改查，并将操作结果返回给前端。MQTT服务器接受来自传感器发送的数据，并存储到数据库中。
+
+本项目将尽量采用符合RESTful风格的API进行前后端数据交互。
 
 ### 4.2 前端技术与实现
 
-本项目暂定使用Vue.js作为前端框架。Vue是一套用于构建用户界面的渐进式 JavaScript框架。Vue 的核心库只关注视图层，并且非常容易学习，也非常容易与其他库或已有项目整合。此外，Vue还具有轻量级、组件化、客户端路由等特点，这使得它具有易理解、代码量小的优势，这也是本项目使用 Vue框架的主要原因。希望能够将更多的精力放在整个B/S体系的软件设计与功能实现的层面。
+#### 4.2.1 前端服务器开发
+
+本项目采用Vue.js作为前端框架。Vue是一套用于构建用户界面的渐进式 JavaScript框架。Vue 的核心库只关注视图层，并且非常容易学习，也非常容易与其他库或已有项目整合。此外，Vue还具有轻量级、组件化、客户端路由等特点，这使得它具有易理解、代码量小的优势，这也是本项目使用 Vue框架的主要原因。希望能够将更多的精力放在整个B/S体系的软件设计与功能实现的层面。
 
 至于UI组件库，我选择了对Vue有较好支持的Element组件库，并参考了前端框架vue-element-admin的逻辑进行设计，该框架是一个基于Vue和ElementUI的后台前端解决方案，拥有设计良好的用户交互界面。
 
-目前项目刚刚开始，代码结构尚不完善。下面简单展示/front-end/src/目录下的各个文件夹结构，并稍作解释。
+前端网页视图主要分为五个部分，分别是“系统主页”、“设备管理”、“数据总览”、“地图视图”以及用户“登陆注册”页面。前四个页面共享同一个导航栏和页面标题栏。
+
+#### 4.2.2 前端目录结构
+
+下面简单展示/front-end/src/目录下的各个文件夹结构。
+
+- App.vue / main.js：程序的入口，前端中需要的各个组件可以在main.js中进行全局注册。
+- /api：定义了前端所要调用的接口和相关的请求类型、请求URL。
+- /assets：存储页面需要的CSS样式和图片
+- /components：定义基础组件，可被各个具体始图调用。这里定义了标题栏和导航栏组件，由各个视图共享。
+- /router：定义页面的跳转路由，对路径进行重定向。
+- /store：维护各个页面间共享的数据和方法。
+- /utils：一些基本工具，如：定义了Email的正则表达式。
+- /vendor：第三方工具，包括导出Excel的该工具。
+- /views：具体的各个视图，包括“系统主页”、“设备管理”、“数据总览”、“地图视图”以及用户“登陆注册”这五类主视图和403视图。
 
 ```
-D:.
-├─App.vue
+/front-end/src
+│  App.vue
+│  main.js
+│
 ├─api
-│  ├─usr.js
-│  └─***
-│   // 该文件下是后端提供的API
+│      charts.js
+│      data.js
+│      facility.js
+│      index.js
+│      user.js
+│
 ├─assets
-│  ├─logo.png
-│  └─***
-│   // 该文件夹下存放了页面所需的图片、字体等文件
+│  └─css
+│         color-dark.css
+│         icon.css
+│         main.css
+│
 ├─components
-│  ├─HomePage
-│  └─***
-│   // Vue的各个组件
+│      Header.vue
+│      Home.vue
+│      Sidebar.vue
+│
 ├─router
-│  └─index.js
-│   // 页面路由，处理各个页面之间的跳转逻辑
+│      index.js
+│
 ├─store
-│  └─modules
+│      index.js
+│
+├─utils
+│      request.js
+│      utils.js
+│
+├─vendor
+│      Export2Excel.js
+│
 └─views
-   ├─home
-   ├─login
-   └─***
-    // 具体的各个视图
+    │  403.vue
+    │
+    ├─dashboard
+    │      Dashboard.vue
+    │
+    ├─data
+    │      Detail.vue
+    │      Overview.vue
+    │
+    ├─facility
+    │      Facility.vue
+    │
+    ├─map
+    │      Map.vue
+    │
+    └─user
+            Login.vue
+            Register.vue
 ```
-
-在后期具体实现时，将会不断完善上面的结构。
 
 
 
 ### 4.3 后端技术与实现
 
-本项目暂定使用Node.js进行后端开发，达成前后端编程环境统一。Node.js是一个基于Chrome V8的JavaScript运行环境，它的特点在于事件驱动和非阻塞I/O，适合做高并发的服务器服务。
+本项目最终采用了Python进行后端开发。
 
-至于MQTT服务器的实现，可以使用Java、Javascript、C/C++、Python等多种语言，该项目暂定同样使用node.js使用JavaScript语言来搭建MQTT服务器，也是出于编程语言一致的考虑。但具体实现时，可能会根据实际情况做出调整。
+#### 4.3.1 后端服务器开发
 
-项目的数据库采用的是MySQL数据库，MySQL是一种关系型数据库，采用传统的sql语句进行查询。由于先修的数据库课程，我对MySQL更为熟悉。同时，考虑到MySQL相较于MongoDB更为成熟稳定，且该项目中的数据格式已经非常明确了，所以最后选择采用MySQL数据库。
+采用Flask框架完成后端服务器的编写。Flask是一个用Python编写的轻量级Web应用程序框架。它使用简单的核心，没有默认使用的数据库、窗体验证工具，但可以通过使用extension增加其他功能。本项目使用了以下的Flask基本功能和扩展功能：
+
+- Blueprint：使用Blueprint可以在不同的文件中定义接口，并一同注册到Flask主程序中，实现Flask开发的模块化。
+- flask_sqlalchemy：SQLAlchemy是Python中最常用的ORM（Object-Relationl Mapping）框架，它能够在关系型数据库和对象之间实现映射，开发者无需直接编写原生SQL语句，而可以使用操作对象的方式操作数据库中的表、对数据进行增删改查。
+- flask_migrate：flask_migrate是处理SQLAlchemy数据迁移的工具。当数据模型发生变化时，flask_migrate可以将修改后的内容重新映射到数据库，完成后端与数据库的同步。
+- flask_cors：实现跨域资源共享，使得本地前端服务器可以向本地后端服务器发起请求。
+
+此外，开发时采用虚拟环境，通过`virtualenv`在工程目录下创建虚拟环境`venv`，将所有第三方包安装在该虚拟环境下。采用虚拟环境的开发方式为应用提供了隔离的Python运行环境，解决了不同应用间多版本的冲突问题，也使得应用更利于迁移。
+
+#### 4.3.2 MQTT服务器开发
+
+MQTT服务器使用Python语言开发，基于`paho-mqtt`库、EMQ X CLOUD免费公用服务器。
+
+`paho-mqtt`是目前Python中使用较多的MQTT客户端库，它提供了一些基础MQTT辅助函数，使得和MQTT服务器的连接变得简单。
+
+[EMQ X CLOUD](https://www.emqx.cn/mqtt/public-mqtt5-broker)是一款开源的物联网MQTT免费公用服务器。
+
+本项目分别实现了向服务器发送（publish）、订阅并接受（subscribe）的两个Python程序。通过调用`paho-mqtt`提供的函数，设定好连接参数，程序就可以接入EMQ X CLOUD服务器，并在名为`python-mqtt/tcp`的Topic下进行不停发送和接收数据。
+
+#### 4.3.3 后端目录结构
+
+下面简单展示/back-end/目录下的各个文件夹结构。
+
+- Flask：后端服务器
+  - app.py：后端主程序，用于启动服务器
+  - configs：储存数据库的基本配置
+  - manage：用于进行数据库迁移（Migrate）
+  - requirement.txt：虚拟环境中导出的Python环境要求
+  - api：定义后端提供的api、路由地址、接收的请求方式
+  - database
+    - extension：定义数据库
+    - models：定义数据库的表头
+    - schema：可用于初始化数据库的SQL文件，包括测试数据的插入
+  - migration：数据库迁移信息，由manage.py自动生成
+  - venv：由`vitrualenv`生成的虚拟环境
+- mqtt：MQTT服务器
+  - mqtt_pub：模拟物联网设备向指定Topic发送数据
+  - mqtt_sub：本项目需要实现的服务器，订阅指定Topic并接收数据
+
+```
+/back-end
+├─flask
+│  │  app.py
+│  │  configs.py
+│  │  manage.py
+│  │  requirement.txt
+│  │
+│  ├─api
+│  │     charts.py
+│  │     data.py
+│  │     facility.py
+│  │     format.py
+│  │     user.py
+│  │
+│  ├─database
+│  │     extension.py
+│  │     models.py
+│  │     schema.sql
+│  │
+│  ├─migrations
+│  │
+│  └─venv
+│
+└─mqtt
+        mqtt_pub.py
+        mqtt_sub.py
+```
 
 
 
@@ -367,43 +481,47 @@ D:.
 
 | 列名  | 说明 |    类型     | 约束 |
 | :---: | :---------: | :------: | :---------------------------------: |
-| facID | 设备ID | varchar(20) |             Primary Key             |
-| name | 设备名 | varchar(30) |                                     |
-| type  | 设备类型：温度、湿度、体温、心率 | varchar(10) | in (“temp”, “humi”, “bodyt”, “rate”) |
-| state |  设备状态  | varchar(10) |  in (“online”, “offline”, “error”)  |
-| unit  | 设备数据单位 | varchar(10) |                                     |
-| step | 时间步长（单位：分钟） | INT |                                     |
+| id | 设备ID | varchar(10) |             Primary Key             |
+| name | 设备名 | varchar(30) | Not Null |
+| type  | 设备类型：温度、湿度、体温、心率 | enum (“temp”, “humi”, “bodyt”, “rate”) | Not Null |
+| status |  设备状态  | enum(“online”, “offline”, “error”) |  Not Null  |
+| unit  | 设备数据单位 | varchar(10) | Not Null |
+| step | 时间步长（单位：分钟） | decimal(4,2) | Not Null |
+| wardID | 设备部署的病房ID | varchar(10) |  |
+| bedID | 设备部署的病床ID | varchar(10) |  |
 
 #### 5.2.2 用户User
 
-|  列名  |   说明   |    类型     |                 约束                 |
-| :----: | :------: | :---------: | :----------------------------------: |
-| userID |  用户ID  | varchar(20) |             Primary Key              |
-| email  | 注册邮箱 | varchar(50) |          Not Empty & Unique          |
-|  name  |  用户名  | varchar(30) |          Not Empty & Unique          |
-| passwd | 用户密码 | varchar(40) |              Not Empty               |
-|  type  | 用户种类 | varchar(10) | in (“doctor”, “patient”, “manager” ) |
+|  列名  |   说明   |                  类型                  |        约束        |
+| :----: | :------: | :------------------------------------: | :----------------: |
+|   id   |  用户ID  |              varchar(10)               |    Primary Key     |
+|  name  |  用户名  |              varchar(30)               |     Not Empty      |
+| email  | 注册邮箱 |              varchar(50)               | Not Empty & Unique |
+| passwd | 用户密码 |              varchar(430)              |      Not Null      |
+|  role  | 用户种类 | enum (“doctor”, “patient”, “manager” ) |      Not Null      |
 
 #### 5.2.3 用户设备对应关系Own
 
-该关系表示userID用户（患者）对应facID（体温、心率）
+该关系表示userID用户（患者）安置在wardID对应病房、bedID对应病床。
 
-|  列名  |    说明    |    类型     | 约束 |
-| :----: | :--------: | :---------: | :--: |
-| userID | 对应用户ID | varchar(20) |      |
-| facID  | 对应设备ID | varchar(20) |      |
+|  列名  |    说明    |    类型     |    约束     |
+| :----: | :--------: | :---------: | :---------: |
+|   id   |   记录ID   | varchar(10) | Primary Key |
+| userID | 对应用户ID | varchar(10) |  Not Null   |
+| wardID | 对应病房ID | varchar(10) |  Not Null   |
+| bedID  | 对应病床ID | varchar(10) |  Not Null   |
 
 #### 5.2.4 数据Data
 
 |  列名  |    说明    |    类型     | 约束 |
 | :----: | :--------: | :---------: | :--: |
-| _ID | 该记录ID编号 | INT | Primary Key |
-| facID | 对应设备ID | varchar(20) |      |
-| time | 数据接收的时间 | datetime |      |
-| location | 设备发送消息时所处的经纬度 | varchar(50) | |
-| **wradID** | **病房ID** | **INT** | |
-| type | 数据类型 | varchar(15) | in (“normal”, “warning”) |
-| amount | 具体数据值 | demical(3, 2) | |
+| id | 该记录ID编号 | varchar(10) | Primary Key |
+| time | 数据接收的时间 | datetime | Not Null |
+| location_lng | 设备发送消息时所处的经度 | decimal(9,6) | Not Null |
+| location_lat | 设备发送消息时所处的纬度 | decimal(9,6) | Not Null |
+| type | 数据类型 | enum(“normal”, “warning”) | Not Null |
+| amount | 具体数据值 | demical(5, 2) | Not Null |
+| facID | 对应设备ID | varchar(10) | Not Null |
 
 
 
