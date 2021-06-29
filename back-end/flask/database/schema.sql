@@ -93,7 +93,7 @@ INSERT INTO `tb_data` VALUES ('1000802', '2021-06-27 08:50:00', 120.130542, 30.2
 INSERT INTO `tb_data` VALUES ('1000803', '2021-06-27 09:20:00', 120.133042, 30.273952, 'warning', '10.1', '10008');
 
 -- user
-INSERT INTO `tb_user` VALUES ('3180105412', 'Yu Ruohan(test_manager)', "3180105412@zju.edu.cn", '123456', 'manager');
+INSERT INTO `tb_user` VALUES ('3180105412', 'Yu Ruohan', "3180105412@zju.edu.cn", '123456', 'manager');
 INSERT INTO `tb_user` VALUES ('3180101111', 'test_patient', "12345678@example.com", '123456', 'patient');
 INSERT INTO `tb_user` VALUES ('3180102222', 'test_doctor', "87654321@example.com", '123456', 'doctor');
 
