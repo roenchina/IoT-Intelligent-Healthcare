@@ -174,6 +174,20 @@
         </el-table-column>
 
         <el-table-column
+          prop="wardID"
+          label="病房ID"
+          align="center"
+          sortable
+        ></el-table-column>
+
+        <el-table-column
+          prop="bedID"
+          label="病床ID"
+          align="center"
+          sortable
+        ></el-table-column>
+
+        <el-table-column
           label="操作"
           v-if="user.role == 'manager'"
           align="center"
@@ -246,6 +260,19 @@
             </el-option>
           </el-select>
         </el-form-item>
+
+       <el-form-item prop="wardID" label="病房ID">
+          <el-input v-model="editForm.wardID">
+          </el-input>
+        </el-form-item>
+
+       <el-form-item prop="bedID" label="病床ID">
+          <el-input v-model="editForm.bedID">
+          </el-input>
+        </el-form-item>
+
+
+        
       </el-form>
 
       <template #footer>
@@ -308,8 +335,19 @@
             </el-option>
           </el-select>
         </el-form-item>
-      </el-form>
 
+       <el-form-item prop="wardID" label="病房ID">
+          <el-input v-model="addForm.wardID" placeholder="请输入病房ID">
+          </el-input>
+        </el-form-item>
+
+       <el-form-item prop="bedID" label="病床ID">
+          <el-input v-model="addForm.bedID" placeholder="请输入病床ID">
+          </el-input>
+        </el-form-item>
+
+      </el-form>
+      
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="addVisible = false">取 消</el-button>
@@ -359,6 +397,8 @@ export default {
         status: "online",
         unit: "",
         step: "",
+        wardID: "",
+        bedID: "",
       },
       addVisible: false,
       addForm: {
@@ -367,8 +407,8 @@ export default {
         status: "online",
         unit: "",
         step: "",
-        wardID: "999",
-        bedID: "99",
+        wardID: "",
+        bedID: "",
       },
       formRules: {
         name: [{ required: true, message: "请输入设备名", trigger: "blur" }],
@@ -391,6 +431,8 @@ export default {
             trigger: "blur",
           },
         ],
+        wardID: [{ required: true, message: "请输入病房ID", trigger: "blur" }],
+        bedID: [{ required: true, message: "请输入病床ID", trigger: "blur" }],
       },
       // enum类型数据
       typeOptions: [
@@ -565,6 +607,8 @@ export default {
                   status: "online",
                   unit: "",
                   step: "",
+                  wardID: "",
+                  bedID: "",
                 };
                 this.getOriginalData(); // 刷新数据
               } else {
