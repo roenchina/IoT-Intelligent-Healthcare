@@ -7,7 +7,7 @@
       <i v-else class="el-icon-lx-sort"></i>
     </div>
 
-    <div class="logo">system</div>
+    <div class="logo">医疗物联网管理系统</div>
 
     <div class="header-right">
       <div class="header-user-con">

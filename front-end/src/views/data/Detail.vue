@@ -134,46 +134,12 @@ export default {
             type: "line",
             data: [10, 11, 13, 11, 12, 12, 9],
             yAxisIndex: '0',
-            // markPoint: {
-            //   data: [
-            //     { type: "max", name: "最大值" },
-            //     { type: "min", name: "最小值" },
-            //   ],
-            // },
-            // markLine: {
-            //   data: [{ type: "average", name: "平均值" }],
-            // },
           },
           {
             name: "湿度",
             type: "line",
             data: [30, 41, 39, 50, 76, 70, 50],
             yAxisIndex: '1',
-
-            // markPoint: {
-            //   data: [{ name: "周最低", value: -2, xAxis: 1, yAxis: -1.5 }],
-            // },
-            // markLine: {
-            //   data: [
-            //     { type: "average", name: "平均值" },
-            //     [
-            //       {
-            //         symbol: "none",
-            //         x: "90%",
-            //         yAxis: "max",
-            //       },
-            //       {
-            //         symbol: "circle",
-            //         label: {
-            //           position: "start",
-            //           formatter: "最大值",
-            //         },
-            //         type: "max",
-            //         name: "最高点",
-            //       },
-            //     ],
-            //   ],
-            // },
           },
         ],
       },

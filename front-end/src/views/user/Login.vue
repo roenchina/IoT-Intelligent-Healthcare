@@ -44,8 +44,6 @@
             >没有账号？注册</el-button
           >
         </div>
-        <!-- <p class="login-tips">Tips : 用户名和密码随便填。</p> -->
-        <!-- <router-link  to="/register">点这里跳转</router-link> -->
       </el-form>
     </div>
   </div>
@@ -75,22 +73,25 @@ export default {
             userID: this.loginForm.userID,
             passwd: this.loginForm.password,
           };
-          userVerify(data).then((res) => {
-            // console.log("when login-----------");
-            // console.log(res.data.ifTrue);
-            if (res.data.ifTrue) {
-              // 验证成功
-              this.$message.success("登录成功！");
-              // 根据从res中的结果，将用户基本信息存到localStorage中，维护登录状态
-              localStorage.setItem("ls_userID", this.loginForm.userID);
-              localStorage.setItem("ls_userName", res.data.userInfo.name);
-              localStorage.setItem("ls_userRole", res.data.userInfo.role);
-              localStorage.setItem("ls_userEmail", res.data.userInfo.email);
-              this.$router.push("/");
-            } else {
-              this.$message.error("用户密码不匹配，请检查后再次输入。");
-            }
-          });
+          userVerify(data)
+            .then((res) => {
+              if (res.data.ifTrue) {
+                // 验证成功
+                this.$message.success("登录成功！");
+                // 根据从res中的结果，将用户基本信息存到localStorage中，维护登录状态
+                localStorage.setItem("ls_userID", this.loginForm.userID);
+                localStorage.setItem("ls_userName", res.data.userInfo.name);
+                localStorage.setItem("ls_userRole", res.data.userInfo.role);
+                localStorage.setItem("ls_userEmail", res.data.userInfo.email);
+                this.$router.push("/");
+              } else {
+                this.$message.error("用户密码不匹配，请检查后再次输入。");
+              }
+            })
+            .catch((e) => {
+              console.log(e);
+              this.$message.error("userVerify后端接口超时");
+            });
         } else {
           this.$message.error("请输入账号和密码后重试。");
           return false;
@@ -109,7 +110,6 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
-  /* background-image: url(../assets/img/login-bg.jpg); */
   background-size: 100%;
 }
 .ms-title {

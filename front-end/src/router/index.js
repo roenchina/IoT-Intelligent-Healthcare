@@ -56,98 +56,6 @@ const routes = [
         component: () => import(
           "../views/map/Map.vue")
       },
-
-      // {
-      //   path: "/table",
-      //   name: "basetable",
-      //   meta: {
-      //     title: '基础表格'
-      //   },
-      //   component: () => import(
-      //     "../views/BaseTable.vue")
-      // },
-      // {
-      //   path: "/echarts",
-      //   name: "echarts-test",
-      //   meta: {
-      //     title: 'vue-echarts测试模块'
-      //   },
-      //   component: () => import(
-      //     "../views/test/vue-echarts.vue")
-      // },
-      // {
-      //   path: "/testmap",
-      //   name: "testmap",
-      //   meta: {
-      //     title: 'map测试模块'
-      //   },
-      //   component: () => import(
-      //     "../views/test/map.vue")
-      // },
-      // {
-      //   path: "/charts",
-      //   name: "basecharts",
-      //   meta: {
-      //     title: '图表'
-      //   },
-      //   component: () => import(
-      //     "../views/BaseCharts.vue")
-      // // },
-      // {
-      //   path: "/form",
-      //   name: "baseform",
-      //   meta: {
-      //     title: '表单相关'
-      //   },
-      //   component: () => import(
-      //     "../views/BaseForm.vue")
-      // },
-      // {
-      //   path: "/tabs",
-      //   name: "tabs",
-      //   meta: {
-      //     title: 'tab选项卡'
-      //   },
-      //   component: () => import(
-      //     "../views/Tabs.vue")
-      // },
-      // {
-      //   path: "/permission",
-      //   name: "permission",
-      //   meta: {
-      //     title: '权限测试',
-      //     permission: true
-      //   },
-      //   component: () => import(
-      //     "../views/Permission.vue")
-      // },
-      // {
-      //   path: "/upload",
-      //   name: "upload",
-      //   meta: {
-      //     title: '文件上传'
-      //   },
-      //   component: () => import(
-      //     "../views/Upload.vue")
-      // },
-      // {
-      //   path: "/icon",
-      //   name: "icon",
-      //   meta: {
-      //     title: '自定义图标'
-      //   },
-      //   component: () => import(
-      //     "../views/Icon.vue")
-      // },
-      // {
-      //   path: '/404',
-      //   name: '404',
-      //   meta: {
-      //     title: '404页面'
-      //   },
-      //   component: () => import(
-      //     '../views/404.vue')
-      // },
       {
         path: '/403',
         name: '403',
@@ -187,9 +95,9 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   document.title = `${to.meta.title} | 智慧医疗物联网管理系统`;
   const userRole = localStorage.getItem('ls_userRole');
-  console.log(userRole);
+  // console.log(userRole);
   if (!userRole && (to.path !== '/login') && (to.path !== '/register')) {
-    console.log("您还没有登录");
+    console.log("检测到未登录");
     next('/login');
   }
   else if (to.path === '/facility' || to.path === '/data_overview' || to.path === '/map') {
