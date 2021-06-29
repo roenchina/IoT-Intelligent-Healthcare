@@ -499,8 +499,10 @@ export default {
           "设备状态",
           "设备数据单位",
           "设备时间步长(min)",
+          "病房号",
+          "病床号"
         ];
-        const filterVal = ["facID", "name", "type", "status", "unit", "step"];
+        const filterVal = ["facID", "name", "type", "status", "unit", "step", "wardID", "bedID"];
         const list = this.selectedData;
         const data = formatJson(filterVal, list);
         excel.export_json_to_excel({
@@ -620,6 +622,7 @@ export default {
               this.$message.error("updateFacility后端服务器超时");
             });
         } else {
+          this.$message.error("您提交的数据不合规范，请检查后再试。");
           return false;
         }
       });

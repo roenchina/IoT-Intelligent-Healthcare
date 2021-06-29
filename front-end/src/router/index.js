@@ -95,9 +95,9 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   document.title = `${to.meta.title} | 智慧医疗物联网管理系统`;
   const userRole = localStorage.getItem('ls_userRole');
-  console.log(userRole);
+  // console.log(userRole);
   if (!userRole && (to.path !== '/login') && (to.path !== '/register')) {
-    console.log("您还没有登录");
+    console.log("检测到未登录");
     next('/login');
   }
   else if (to.path === '/facility' || to.path === '/data_overview' || to.path === '/map') {
