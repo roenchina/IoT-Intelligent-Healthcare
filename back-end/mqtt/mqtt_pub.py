@@ -3,7 +3,7 @@ import random
 import time
 
 from paho.mqtt import client as mqtt_client
-
+from datetime import datetime
 
 BROKER = 'broker.emqx.io'
 PORT = 1883
@@ -36,9 +36,12 @@ def publish(client):
     msg_count = 0
     while True:
         msg_dict = {
-            'msg_count': msg_count,
-            'test_facID': msg_count + 10000,
-            'test_data': '{data}'.format(data=random.randint(0, 1000))
+            'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            'location_lng': random.uniform(120.1, 120.2),
+            'location_lat': random.uniform(30.2, 31.3),
+            'type': 'normal',
+            'amount': random.uniform(25, 35),
+            'facID': '10001',
         }
         msg = json.dumps(msg_dict)
         result = client.publish(TOPIC, msg)
